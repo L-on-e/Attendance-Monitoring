@@ -1,8 +1,41 @@
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View, StatusBar, KeyboardAvoidingView } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import * as SplashScreen from 'expo-splash-screen'
+import {
+  useFonts,
+  Poppins_400Regular,
+  Poppins_500Medium,
+  Poppins_600SemiBold,
+  Poppins_700Bold,
+  Poppins_800ExtraBold,
+  Poppins_900Black,
+} from '@expo-google-fonts/poppins';
+
 const SignUpScreen = () => {
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    async function prepare() {
+      try { await SplashScreen.preventAutoHideAsync();} 
+      catch (e) {console.warn(e);} 
+      finally { setIsReady(true);}
+    }
+    prepare();
+    return () => { SplashScreen.hideAsync(); };
+  }, [isReady]);
+
+  let [fontsLoaded] = useFonts({
+    Poppins_400Regular,
+    Poppins_500Medium,
+    Poppins_600SemiBold,
+    Poppins_700Bold,
+    Poppins_800ExtraBold,
+    Poppins_900Black,
+  });
+
+
   const navigation = useNavigation();
   const [ID, setID] = useState(null);
   const [name, setName] = useState(null);
@@ -42,28 +75,102 @@ const SignUpScreen = () => {
     })
     .catch((error)=>console.log(error));
   }
-
+  
+  if (!isReady || !fontsLoaded) { return null;}
   return (
-    <View className="flex-1 items-center justify-center">
-      <TouchableOpacity onPress={()=>navigation.goBack()}>
-        <Ionicons name='chevron-back-outline' size={30}/>
+    <KeyboardAvoidingView className="items-center" style={styles.container}>
+  
+      <TouchableOpacity onPress={()=>navigation.goBack()} className="self-start" style={styles.backArrow}>
+          <Ionicons name='arrow-back' size={35}/>
       </TouchableOpacity>
-      <Text>Sign Up</Text>
-      <TextInput value={ID} onChangeText={(text)=>setID(text)} placeholder='ID'/>
-      <TextInput value={name} onChangeText={(text)=>setName(text)} placeholder='Name'/>
-      <TextInput value={department} onChangeText={(text)=>setDepartment(text)} placeholder='Department'/>
-      <TextInput value={password} onChangeText={(text)=>setPassword(text)} placeholder='Password'/>
-      <TextInput value={confirmPassword} onChangeText={(text)=>setConfirmPassword(text)} placeholder='Confirm Password'/>
-      <View className="w-screen flex-row justify-evenly">
-        <TouchableOpacity className="p-3 w-1/3 items-center border-[2px] rounded-[10px]">
-          <Text>Reset</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={signUp} className="p-3 w-1/3 items-center border-[2px] rounded-[10px]">
-          <Text>Sign Up</Text>
-        </TouchableOpacity>
+      
+      <View className="flex-column items-center">        
+        <Text className="text-4xl" style={styles.createHead}>Create Account</Text>
+        <Text className="text-1xl" style={styles.createSubTxt}>Create a new Account</Text>
       </View>
-    </View>
+
+
+      <View style={styles.inputLayout} className="padding-">
+        <View className="border-2 w-64 p-1 h-10 rounded-[12px]" style={styles.borderColor}>
+          <TextInput className="w-full text-[18px] text-center"  placeholder="ID" placeholderTextColor="#006738" style={styles.inputTxt}/> 
+        </View>
+        
+        <View className="border-2 w-64 p-1 h-10 rounded-[12px] " style={styles.borderColor}>
+          <TextInput className="w-full text-[18px] text-center"  placeholder="NAME" placeholderTextColor="#006738" style={styles.inputTxt}/>   
+        </View>
+
+        <View className="border-2 w-64 p-1 h-10 rounded-[12px]" style={styles.borderColor}>
+          <TextInput className="w-full text-[18px] text-center"  placeholder="DEPARTMENT" placeholderTextColor="#006738" style={styles.inputTxt}/>
+        </View>
+
+        <View className="border-2 w-64 p-1 h-10 rounded-[12px] " style={styles.borderColor}>
+          <TextInput className="w-full text-[18px] text-center"  placeholder="PASSWORD" placeholderTextColor="#006738" style={styles.inputTxt}/>
+        </View>
+
+        <View className="border-2 64 p-1 h-10 rounded-[12px]" style={styles.borderColor}>
+          <TextInput className="w-full text-[18px] text-center"  placeholder="CONFIRM PASSWORD" placeholderTextColor="#006738" style={styles.inputTxt}/>
+        </View>
+      </View>
+
+      <TouchableOpacity className="border-2 p-2 w-1/2 h-10 rounded-[10px] items-center bg-[#006738] border-transparent" style={styles.creatBTn}>
+        <Text className="text-white text-[18px]" style={styles.btnText}>CREATE ACCOUNT</Text>
+      </TouchableOpacity>
+
+
+      <View className="flex-row"  style={styles.btnBfText}>
+            <Text className="text-[16px] text-black">Need and Account?</Text>  
+            <TouchableOpacity onPress={() => navigation.navigate('SignUp')} className="items-center ">
+                <Text className="text-[16px]" style={styles.btnText1}>Sign Up</Text>
+            </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
   )
 }
 
 export default SignUpScreen
+
+const styles = StyleSheet.create({
+
+  container:{
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    flex:1,
+  },
+  createHead:{
+    marginTop: 40,
+    fontFamily: 'Poppins_600SemiBold',
+    color: "#006738"
+  },
+
+  createSubTxt:{
+    fontFamily: "Poppins_500Medium",
+    opacity: 0.5
+  },
+  backArrow:{
+    marginLeft:10,
+    marginTop:15
+  },
+  btnText:{
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  creatBTn:{
+    marginTop: 20
+  },
+
+  btnBfText:{
+    marginTop: 20
+  },
+
+  inputTxt:{
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  btnText1:{
+    fontFamily: 'Poppins_500Medium',
+    color: "#006738",
+    marginLeft: 5
+  },
+  borderColor:{
+    borderColor: "#006738",
+    marginTop:25
+  },
+
+});
