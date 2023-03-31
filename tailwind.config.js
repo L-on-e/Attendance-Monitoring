@@ -6,6 +6,8 @@ module.exports = {
     "./Screens/SignUpScreen.js",
     './Screens/Instructor/Home.js',
     './Screens/Instructor/QRScanner.js',
+    './Screens/Instructor/TimeIn.js',
+    './Screens/Instructor/TimeOut.js',
   ],
   theme: {
     extend: {},

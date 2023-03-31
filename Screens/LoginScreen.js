@@ -40,7 +40,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState(null);
 
   const login = () =>{
-    const APIURL = "http://192.168.109.37/API/Login.php";
+    const APIURL = "http://192.168.111.95/API/Login.php";
     const headers = {
       'Accept':'application/json',
       'Content-Type':'application.json'
@@ -84,7 +84,7 @@ const LoginScreen = () => {
               <TextInput className="text-[18px] text-center" value={ID} onChangeText={text => setID(text)} placeholder="ENTER ID"  placeholderTextColor="#006738" style={styles.inputTxt}/>
           </View>
           <View className="border-2 w-1/2 h-10 p-1 rounded-[8px] my-36" style={styles.borderColor}>
-              <TextInput className="w-full text-[18px] text-center" value={password} onChangeText={text => setPassword(text)} placeholder="PASSWORD" placeholderTextColor="#006738" style={styles.inputTxt}/>
+              <TextInput className="w-full text-[18px] text-center" value={password} onChangeText={text => setPassword(text)} placeholder="PASSWORD" secureTextEntry placeholderTextColor="#006738" style={styles.inputTxt}/>
           </View>
 
           <TouchableOpacity onPress={login} className="border-2 p-2 w-4/12 h-10 rounded-[10px] items-center bg-[#006738] border-transparent -my-32">
@@ -96,7 +96,7 @@ const LoginScreen = () => {
           </TouchableOpacity>
 
           <View className="flex-row  -top-36 ">
-            <Text className="text-[16px] text-black">Need and Account?</Text>  
+            <Text className="text-[16px] text-black">Need an Account?</Text>  
             <TouchableOpacity onPress={() => navigation.navigate('SignUp')} className="items-center ">
                 <Text className="text-[16px]" style={styles.btnText1}>Sign Up</Text>
             </TouchableOpacity>

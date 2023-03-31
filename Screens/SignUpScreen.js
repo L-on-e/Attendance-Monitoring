@@ -37,18 +37,28 @@ const SignUpScreen = () => {
 
 
   const navigation = useNavigation();
-  const [ID, setID] = useState(null);
-  const [name, setName] = useState(null);
-  const [department, setDepartment] = useState(null);
-  const [password, setPassword] = useState(null);
-  const [confirmPassword, setConfirmPassword] = useState(null);
+  const [ID, setID] = useState("");
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [department, setDepartment] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const signUp = () =>{
-    //validate first the password
-    register();
+
+  const ValidateCredentials = () =>{
+    if (ID.length == 0) Alert.alert("ID is required");
+    else if (name.length == 0) Alert.alert("Username is required");
+    else if (email.length == 0) Alert.alert("Email is required");
+    else if (department.length == 0) Alert.alert("Department is required");
+    // else if (password.length == 0) Alert.alert("Password is required");
+    // else if (password.length < 8) Alert.alert("Password must have 8 characters or more");
+    // else if (confirmPassword.length == 0) Alert.alert("Confirm Password is required");
+    // else if (password != confirmPassword) Alert.alert("Password does not match");
+    else Register();
   }
-  const register = () =>{
-    const APIURL = "http://192.168.109.37/API/Register.php";
+
+  const Register = () =>{
+    const APIURL = "http://192.168.111.95/API/Register.php";
     const headers = {
       'Accept':'application/json',
       'Content-Type':'application.json'
@@ -57,6 +67,7 @@ const SignUpScreen = () => {
       id: ID,
       password: password,
       instructorName: name,
+      email: email,
       department: department,
     }
 
@@ -66,12 +77,14 @@ const SignUpScreen = () => {
       body: JSON.stringify(data),
     })
     .then((response) =>
-      response.json())
+      response.json())  
     .then((response) =>{
-      response[0].message == "User does not exist" ? 
-        Alert.alert("Register now")  
-      // navigation.dispatch(StackActions.replace('Home')) 
-        :  Alert.alert(response[0].message);  
+      response[0].message == "Error inserting record" ? 
+        Alert.alert("Error inserting record")  
+        : response[0].message == "User Already Exist" ?
+        Alert.alert("User Already Exist")  
+        :
+        Alert.alert("Success", "Record Inserted", [{text: 'Continue', onPress : () =>{navigation.navigate("SignIn")}}]);   
     })
     .catch((error)=>console.log(error));
   }
@@ -92,35 +105,39 @@ const SignUpScreen = () => {
 
       <View style={styles.inputLayout} className="padding-">
         <View className="border-2 w-64 p-1 h-10 rounded-[12px]" style={styles.borderColor}>
-          <TextInput className="w-full text-[18px] text-center"  placeholder="ID" placeholderTextColor="#006738" style={styles.inputTxt}/> 
+          <TextInput className="w-full text-[18px] text-center" onChangeText={text=>setID(text)} placeholder="ID" placeholderTextColor="#006738" style={styles.inputTxt}/> 
         </View>
         
         <View className="border-2 w-64 p-1 h-10 rounded-[12px] " style={styles.borderColor}>
-          <TextInput className="w-full text-[18px] text-center"  placeholder="NAME" placeholderTextColor="#006738" style={styles.inputTxt}/>   
-        </View>
-
-        <View className="border-2 w-64 p-1 h-10 rounded-[12px]" style={styles.borderColor}>
-          <TextInput className="w-full text-[18px] text-center"  placeholder="DEPARTMENT" placeholderTextColor="#006738" style={styles.inputTxt}/>
+          <TextInput className="w-full text-[18px] text-center" onChangeText={text=>setName(text)} placeholder="USERNAME" placeholderTextColor="#006738" style={styles.inputTxt}/>   
         </View>
 
         <View className="border-2 w-64 p-1 h-10 rounded-[12px] " style={styles.borderColor}>
-          <TextInput className="w-full text-[18px] text-center"  placeholder="PASSWORD" placeholderTextColor="#006738" style={styles.inputTxt}/>
+          <TextInput className="w-full text-[18px] text-center" onChangeText={text=>setEmail(text)} placeholder="EMAIL" placeholderTextColor="#006738" style={styles.inputTxt}/>   
+        </View>
+
+        <View className="border-2 w-64 p-1 h-10 rounded-[12px]" style={styles.borderColor}>
+          <TextInput className="w-full text-[18px] text-center" onChangeText={text=>setDepartment(text)} placeholder="DEPARTMENT" placeholderTextColor="#006738" style={styles.inputTxt}/>
+        </View>
+
+        <View className="border-2 w-64 p-1 h-10 rounded-[12px] " style={styles.borderColor}>
+          <TextInput className="w-full text-[18px] text-center" secureTextEntry onChangeText={text=>setPassword(text)} placeholder="PASSWORD" placeholderTextColor="#006738" style={styles.inputTxt}/>
         </View>
 
         <View className="border-2 64 p-1 h-10 rounded-[12px]" style={styles.borderColor}>
-          <TextInput className="w-full text-[18px] text-center"  placeholder="CONFIRM PASSWORD" placeholderTextColor="#006738" style={styles.inputTxt}/>
+          <TextInput className="w-full text-[18px] text-center" secureTextEntry onChangeText={text=>setConfirmPassword(text)} placeholder="CONFIRM PASSWORD" placeholderTextColor="#006738" style={styles.inputTxt}/>
         </View>
       </View>
 
       <TouchableOpacity className="border-2 p-2 w-1/2 h-10 rounded-[10px] items-center bg-[#006738] border-transparent" style={styles.creatBTn}>
-        <Text className="text-white text-[18px]" style={styles.btnText}>CREATE ACCOUNT</Text>
+        <Text className="text-white text-[18px]" onPress={()=>ValidateCredentials()} style={styles.btnText}>CREATE ACCOUNT</Text>
       </TouchableOpacity>
 
 
       <View className="flex-row"  style={styles.btnBfText}>
-            <Text className="text-[16px] text-black">Need and Account?</Text>  
-            <TouchableOpacity onPress={() => navigation.navigate('SignUp')} className="items-center ">
-                <Text className="text-[16px]" style={styles.btnText1}>Sign Up</Text>
+            <Text className="text-[16px] text-black">Have an Account?</Text>  
+            <TouchableOpacity onPress={() => navigation.goBack()} className="items-center ">
+                <Text className="text-[16px]" style={styles.btnText1}>Sign In</Text>
             </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>

@@ -27,7 +27,7 @@ const QRScanner = () => {
   };
 
   const InsertDB = (date, time) =>{
-    const APIURL = "http://192.168.109.37/API/TimeIn.php";
+    const APIURL = "http://192.168.111.95/API/TimeIn.php";
     const headers = {
       'Accept':'application/json',
       'Content-Type':'application.json'
