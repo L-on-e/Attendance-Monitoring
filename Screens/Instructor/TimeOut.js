@@ -27,7 +27,7 @@ const TimeOut = () => {
     };
   
     const InsertDB = (date, time, uid) =>{
-      const APIURL = "http://192.168.111.95/API/TimeOut.php";
+      const APIURL = "http://192.168.1.17/API/TimeOut.php";
       const headers = {
         'Accept':'application/json',
         'Content-Type':'application.json'

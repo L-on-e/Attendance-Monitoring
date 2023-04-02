@@ -40,7 +40,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState(null);
 
   const login = () =>{
-    const APIURL = "http://192.168.111.95/API/Login.php";
+    const APIURL = "http://192.168.1.17/API/Login.php";
     const headers = {
       'Accept':'application/json',
       'Content-Type':'application.json'
@@ -49,7 +49,6 @@ const LoginScreen = () => {
       id: ID,
       password: password,
     }
-
     fetch(APIURL,{
       method: 'POST',
       headers: headers,
@@ -87,7 +86,10 @@ const LoginScreen = () => {
               <TextInput className="w-full text-[18px] text-center" value={password} onChangeText={text => setPassword(text)} placeholder="PASSWORD" secureTextEntry placeholderTextColor="#006738" style={styles.inputTxt}/>
           </View>
 
-          <TouchableOpacity onPress={login} className="border-2 p-2 w-4/12 h-10 rounded-[10px] items-center bg-[#006738] border-transparent -my-32">
+          <TouchableOpacity onPress={
+            () => navigation.navigate("Home")
+            // login
+            } className="border-2 p-2 w-4/12 h-10 rounded-[10px] items-center bg-[#006738] border-transparent -my-32">
               <Text className="text-white text-[18px]" style={styles.btnText}>SIGN IN</Text>
           </TouchableOpacity>
 
