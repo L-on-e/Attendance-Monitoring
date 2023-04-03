@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { StackActions, useRoute } from '@react-navigation/native';
 import * as SplashScreen from 'expo-splash-screen'
+import { LinearGradient } from 'expo-linear-gradient';
+
 import {
   useFonts,
   Poppins_400Regular,
@@ -67,45 +69,19 @@ const LoginScreen = () => {
   if (!isReady || !fontsLoaded) { return null;}
   return (
     <KeyboardAvoidingView style={styles.container}>
-    <ImageBackground className="absolute inset-x-0 top-0 " source={require('../images/loginBG.png')} style={styles.bgImage}>
-    
-    <View className="flex-column" style={styles.container}>
-      <View className="items-center my-32">
-        <Text style={styles.logInWc} className="self-end -left-10" >WELCOME</Text>
-          <TouchableOpacity>
-            <Image className="my-24" source={require('../images/gBtn.png')} style={styles.gbtn}/>
-          </TouchableOpacity>
-          <View>
-            <Text style={styles.sText} className="-my-44">Or</Text>
-          </View>
 
-          <View className="border-2 w-2/4 p-1 h-10 rounded-[8px] -my-32" style={styles.borderColor}>
-              <TextInput className="text-[18px] text-center" value={ID} onChangeText={text => setID(text)} placeholder="ENTER ID"  placeholderTextColor="#006738" style={styles.inputTxt}/>
-          </View>
-          <View className="border-2 w-1/2 h-10 p-1 rounded-[8px] my-36" style={styles.borderColor}>
-              <TextInput className="w-full text-[18px] text-center" value={password} onChangeText={text => setPassword(text)} placeholder="PASSWORD" secureTextEntry placeholderTextColor="#006738" style={styles.inputTxt}/>
-          </View>
 
-          <TouchableOpacity onPress={
-            () => navigation.navigate("Home")
-            // login
-            } className="border-2 p-2 w-4/12 h-10 rounded-[10px] items-center bg-[#006738] border-transparent -my-32">
-              <Text className="text-white text-[18px]" style={styles.btnText}>SIGN IN</Text>
-          </TouchableOpacity>
+        <Image source={require('../images/lormaLogo.png')} style={styles.lolma}/>
 
-          <TouchableOpacity className="items-centerborder-transparent my-40">
-              <Text className="text-white text-[16px]" style={styles.btnText1}>Forgot Password?</Text>
-          </TouchableOpacity>
+      <LinearGradient
+        // Background Linear Gradient
+        start={{ x: 1, y: -.9 }}
+        end={{ x: 1, y: .9 }}
+        colors={['#fff','transparent', '#006738']}
+        style={styles.background}
+      >
 
-          <View className="flex-row  -top-36 ">
-            <Text className="text-[16px] text-black">Need an Account?</Text>  
-            <TouchableOpacity onPress={() => navigation.navigate('SignUp')} className="items-center ">
-                <Text className="text-[16px]" style={styles.btnText1}>Sign Up</Text>
-            </TouchableOpacity>
-          </View>
-      </View>
-    </View>
-    </ImageBackground>
+      </LinearGradient>
     </KeyboardAvoidingView>
   )
 }
@@ -117,26 +93,18 @@ const styles = StyleSheet.create({
   container:{
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     flex:1,
+    backgroundColor:"#fff"
   },
-
-  bgImage:{
-    width: "100%",
-    hieght: "100%",
+  background:{
+    flex:1
   },
-
-  logInWc:{
-    fontFamily: 'Poppins_700Bold',
-    color: 'white',
-    fontSize: 55
-  },
-
-  gbtn:{
-    width: "60%",
-    height: undefined,
+  lolma:{
     aspectRatio: 1,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
+    maxWidth: "50%",
+    maxHeight: "50%",
+    alignSelf:'center'
   },
-
   sText:{
     fontFamily: 'Poppins_500Medium',
   },
