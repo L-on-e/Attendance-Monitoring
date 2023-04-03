@@ -34,7 +34,6 @@ const Home = () => {
         :
         <SettingsContent showMenu={showMenu} scaleValue={scaleValue} offsetValue={offsetValue} closeButtonOffset={closeButtonOffset} setShowMenu={handleMenuBoolean}/>
       }
-      {/* {stateFromChild == 'Home' ? <HomeContent/>: stateFromChild == "Subjects"? <SubjectsContent/>:<SettingsContent/>} */}
     </SafeAreaView>
   );
 }

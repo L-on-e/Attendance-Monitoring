@@ -40,7 +40,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState(null);
 
   const login = () =>{
-    const APIURL = "http://192.168.1.17/API/Login.php";
+    const APIURL = "http://192.168.111.95/API/Login.php";
     const headers = {
       'Accept':'application/json',
       'Content-Type':'application.json'
