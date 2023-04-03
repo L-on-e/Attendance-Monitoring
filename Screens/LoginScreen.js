@@ -68,20 +68,28 @@ const LoginScreen = () => {
 
   if (!isReady || !fontsLoaded) { return null;}
   return (
-    <KeyboardAvoidingView style={styles.container}>
-
-
-        <Image source={require('../images/lormaLogo.png')} style={styles.lolma}/>
-
+    <KeyboardAvoidingView style={styles.container}
+    >
+      <ImageBackground source={require('../images/CLI_BDG.png')} style={styles.cliBg}>
+          <Image source={require('../images/lormaLogo.png')} style={styles.lolma}/>
       <LinearGradient
         // Background Linear Gradient
-        start={{ x: 1, y: -.9 }}
-        end={{ x: 1, y: .9 }}
-        colors={['#fff','transparent', '#006738']}
+        start={{ x: 1, y: -.9}}
+        end={{ x: 1, y: .9}}
+        colors={['#fff','transparent','#006738']}
         style={styles.background}
       >
+        
+          <View  className="border-b-2 w-1/2  p-1 rounded-[4px]"style={styles.borderColor}>
+              <TextInput className="text-[18px] text-center" value={ID} onChangeText={text => setID(text)} placeholder="ENTER ID"  placeholderTextColor="#006738" style={styles.inputTxt}/>
+          </View>
+          <View className="border-2 w-1/2  p-1 rounded-[4px]" style={styles.borderColor}>
+              <TextInput className="w-full text-[18px] text-center" value={password} onChangeText={text => setPassword(text)} placeholder="PASSWORD" secureTextEntry placeholderTextColor="#006738" style={styles.inputTxt}/>
+          </View>
+
 
       </LinearGradient>
+      </ImageBackground>
     </KeyboardAvoidingView>
   )
 }
@@ -93,24 +101,33 @@ const styles = StyleSheet.create({
   container:{
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     flex:1,
-    backgroundColor:"#fff"
+    backgroundColor:"#006738",
   },
   background:{
     flex:1
+  },
+  cliBg:{
+    aspectRatio: 1,
+    resizeMode: 'cover',
+    maxWidth: "100%",
+    maxHeight: "100%",
+    alignSelf:"flex-start",
+    marginTop:-50
   },
   lolma:{
     aspectRatio: 1,
     resizeMode: 'contain',
     maxWidth: "50%",
     maxHeight: "50%",
-    alignSelf:'center'
+    alignSelf:"flex-end",
   },
   sText:{
     fontFamily: 'Poppins_500Medium',
   },
 
   borderColor:{
-    borderColor: "#006738"
+    borderColor: '#fff',
+
   },
   
   inputTxt:{
