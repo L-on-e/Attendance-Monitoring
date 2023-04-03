@@ -91,6 +91,25 @@ const LoginScreen = () => {
             </View>
           </View>
 
+          <View className="flex-column" style={styles.etcBtn}>
+            <TouchableOpacity onPress={
+              () => navigation.navigate("Home")
+              // login
+              } className="border-2 p-2 w-4/12 h-10 rounded-[10px] items-center bg-[#006738] border-transparent ">
+                <Text className="text-white text-[18px]" style={styles.btnText}>SIGN IN</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity className="border-transparent ">
+                <Text className="text-white text-[16px]" style={styles.btnText1}>Forgot Password?</Text>
+            </TouchableOpacity>
+
+            <View className="flex-row ">
+              <Text className="text-[16px] text-black" style={styles.nAc}>Need an Account?</Text>  
+              <TouchableOpacity onPress={() => navigation.navigate('SignUp')} className="items-center ">
+                  <Text className="text-[16px]" style={styles.btnText1}>Sign Up</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
       </LinearGradient>
       </ImageBackground>
     </KeyboardAvoidingView>
@@ -125,20 +144,22 @@ const styles = StyleSheet.create({
     minHeight: "50%",
     maxHeight: "50%",
     alignSelf:"flex-end",
-    marginHorizontal:-20
+    marginHorizontal:-10
   },
 
   content:{
-    marginTop:180,
+    marginTop:150,
     flexGrow: .2,
     justifyContent: 'space-evenly',
   },
 
   inputFields:{
-    marginVertical:10,
+    marginVertical:-20,
     alignItems: "flex-end",
     flexGrow: .2,
     justifyContent: 'space-evenly',
+    backgroundColor: 'black',
+    paddingBottom: 10
   },
   sText:{
     fontFamily: 'Poppins_500Medium',
@@ -149,19 +170,29 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderBottomLeftRadius: 20,
     borderTopLeftRadius: 20,
-    marginTop:10
+    marginTop:10,
   },
   
   inputTxt:{
     fontFamily: 'Poppins_600SemiBold',
     padding:1,
   },
-  btnText:{
+  btnText:{  
     fontFamily: 'Poppins_600SemiBold',
+  },
+
+  etcBtn:{
+    paddingTop: 10,
+    flexGrow: .1,
+    backgroundColor: 'red',
+    alignItems: "flex-end",
+  },
+  nAc:{
+    fontFamily: 'Poppins_500Medium',
   },
   btnText1:{
     fontFamily: 'Poppins_500Medium',
-    color: "#006738",
+    color: "#fff",
     marginLeft: 5
   }
 
