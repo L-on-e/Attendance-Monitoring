@@ -71,7 +71,7 @@ const LoginScreen = () => {
     <KeyboardAvoidingView style={styles.container}
     >
       <ImageBackground source={require('../images/CLI_BDG.png')} style={styles.cliBg}>
-          <Image source={require('../images/lormaLogo.png')} style={styles.lolma}/>
+          {/* <Image source={require('../images/lormaLogo.png')} style={styles.lolma}/> */}
       <LinearGradient
         // Background Linear Gradient
         start={{ x: 1, y: -.9}}
@@ -79,12 +79,15 @@ const LoginScreen = () => {
         colors={['#fff','transparent','#006738']}
         style={styles.background}
       >
-          <View style={styles.inputFields} className={'flex-column'}>
-            <View  className="border-b-4 w-1/2  p-1 "style={styles.borderColor}>
-                <TextInput className="text-[18px] text-center" value={ID} onChangeText={text => setID(text)} placeholder="ENTER ID"  placeholderTextColor="#006738" style={styles.inputTxt}/>
-            </View>
-            <View className="border-b-4 w-1/2  p-1" style={styles.borderColor}>
-                <TextInput className="w-full text-[18px] text-center" value={password} onChangeText={text => setPassword(text)} placeholder="PASSWORD" secureTextEntry placeholderTextColor="#006738" style={styles.inputTxt}/>
+          <View className="flex-column" style={styles.content}>
+            <Image source={require('../images/lormaLogo.png')}  style={styles.lolma}/>
+            <View style={styles.inputFields} className={'flex-column'}>
+              <View  className="border-b-4 w-1/2  p-1 "style={styles.borderStyle}>
+                  <TextInput className="text-[18px] text-center " value={ID} onChangeText={text => setID(text)} placeholder="ENTER ID"  placeholderTextColor="#006738" style={styles.inputTxt}/>
+              </View>
+              <View className="border-b-4 w-1/2  p-1" style={styles.borderStyle}>
+                  <TextInput className="text-[18px] text-center" value={password} onChangeText={text => setPassword(text)} placeholder="PASSWORD" secureTextEntry placeholderTextColor="#006738" style={styles.inputTxt}/>
+              </View>
             </View>
           </View>
 
@@ -117,32 +120,41 @@ const styles = StyleSheet.create({
   lolma:{
     aspectRatio: 1,
     resizeMode: 'contain',
-    maxWidth: "50%",
+    minWidth: "50%",
+    maxWidth: "60%",
     minHeight: "50%",
+    maxHeight: "50%",
     alignSelf:"flex-end",
-    backgroundColor: 'blue',
+    marginHorizontal:-20
+  },
+
+  content:{
+    marginTop:180,
+    flexGrow: .2,
+    justifyContent: 'space-evenly',
   },
 
   inputFields:{
-   alignItems: "flex-end",
-   flexGrow: .1,
-   justifyContent: 'space-evenly',
-   backgroundColor:'red'
+    marginVertical:10,
+    alignItems: "flex-end",
+    flexGrow: .2,
+    justifyContent: 'space-evenly',
   },
   sText:{
     fontFamily: 'Poppins_500Medium',
   },
 
-  borderColor:{
+  borderStyle:{
     borderColor: '#fff',
     backgroundColor: '#fff',
     borderBottomLeftRadius: 20,
-    borderTopLeftRadius: 20
+    borderTopLeftRadius: 20,
+    marginTop:10
   },
   
   inputTxt:{
     fontFamily: 'Poppins_600SemiBold',
-    padding:5,
+    padding:1,
   },
   btnText:{
     fontFamily: 'Poppins_600SemiBold',
