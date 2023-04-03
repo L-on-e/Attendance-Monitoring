@@ -79,14 +79,14 @@ const LoginScreen = () => {
         colors={['#fff','transparent','#006738']}
         style={styles.background}
       >
-        
-          <View  className="border-b-2 w-1/2  p-1 rounded-[4px]"style={styles.borderColor}>
-              <TextInput className="text-[18px] text-center" value={ID} onChangeText={text => setID(text)} placeholder="ENTER ID"  placeholderTextColor="#006738" style={styles.inputTxt}/>
+          <View style={styles.inputFields} className={'flex-column'}>
+            <View  className="border-b-4 w-1/2  p-1 "style={styles.borderColor}>
+                <TextInput className="text-[18px] text-center" value={ID} onChangeText={text => setID(text)} placeholder="ENTER ID"  placeholderTextColor="#006738" style={styles.inputTxt}/>
+            </View>
+            <View className="border-b-4 w-1/2  p-1" style={styles.borderColor}>
+                <TextInput className="w-full text-[18px] text-center" value={password} onChangeText={text => setPassword(text)} placeholder="PASSWORD" secureTextEntry placeholderTextColor="#006738" style={styles.inputTxt}/>
+            </View>
           </View>
-          <View className="border-2 w-1/2  p-1 rounded-[4px]" style={styles.borderColor}>
-              <TextInput className="w-full text-[18px] text-center" value={password} onChangeText={text => setPassword(text)} placeholder="PASSWORD" secureTextEntry placeholderTextColor="#006738" style={styles.inputTxt}/>
-          </View>
-
 
       </LinearGradient>
       </ImageBackground>
@@ -118,8 +118,16 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     resizeMode: 'contain',
     maxWidth: "50%",
-    maxHeight: "50%",
+    minHeight: "50%",
     alignSelf:"flex-end",
+    backgroundColor: 'blue',
+  },
+
+  inputFields:{
+   alignItems: "flex-end",
+   flexGrow: .1,
+   justifyContent: 'space-evenly',
+   backgroundColor:'red'
   },
   sText:{
     fontFamily: 'Poppins_500Medium',
@@ -127,11 +135,14 @@ const styles = StyleSheet.create({
 
   borderColor:{
     borderColor: '#fff',
-
+    backgroundColor: '#fff',
+    borderBottomLeftRadius: 20,
+    borderTopLeftRadius: 20
   },
   
   inputTxt:{
     fontFamily: 'Poppins_600SemiBold',
+    padding:5,
   },
   btnText:{
     fontFamily: 'Poppins_600SemiBold',
