@@ -95,7 +95,7 @@ const LoginScreen = () => {
             <TouchableOpacity onPress={
               () => navigation.navigate("Home")
               // login
-              } className="border-2 p-2 w-4/12 h-10 rounded-[10px] items-center bg-[#006738] border-transparent ">
+              } className="border-4 p-1 w-full h-10 rounded-[10px] items-center bg-[#006738]" style={styles.btnDes}>
                 <Text className="text-white text-[18px]" style={styles.btnText}>SIGN IN</Text>
             </TouchableOpacity>
 
@@ -158,7 +158,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     flexGrow: .2,
     justifyContent: 'space-evenly',
-    backgroundColor: 'black',
     paddingBottom: 10
   },
   sText:{
@@ -177,15 +176,22 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_600SemiBold',
     padding:1,
   },
+
+  btnDes:{
+    borderColor:'#006738'
+  },
   btnText:{  
     fontFamily: 'Poppins_600SemiBold',
+    color: '#fff',
   },
 
   etcBtn:{
+    alignSelf: 'flex-end',
+    width:"50%",
     paddingTop: 10,
     flexGrow: .1,
-    backgroundColor: 'red',
-    alignItems: "flex-end",
+    alignItems: "center",
+    marginVertical: -150,
   },
   nAc:{
     fontFamily: 'Poppins_500Medium',
