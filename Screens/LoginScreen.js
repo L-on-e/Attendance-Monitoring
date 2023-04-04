@@ -76,7 +76,7 @@ const LoginScreen = () => {
         // Background Linear Gradient
         start={{ x: 1, y: -.9}}
         end={{ x: 1, y: .9}}
-        colors={['#fff','transparent','#006738']}
+        colors={['#fff','transparent','#fff']}
         style={styles.background}
       >
           <View className="flex-column" style={styles.content}>
@@ -91,14 +91,16 @@ const LoginScreen = () => {
             </View>
           </View>
 
-          <View className="flex-column" style={styles.etcBtn}>
-            <TouchableOpacity onPress={
-              () => navigation.navigate("Home")
-              // login
-              } className="border-4 p-1 w-full h-10 rounded-[10px] items-center bg-[#006738]" style={styles.btnDes}>
-                <Text className="text-white text-[18px]" style={styles.btnText}>SIGN IN</Text>
-            </TouchableOpacity>
+          <View className="w-full" style={styles.btnDvd}>
+              <TouchableOpacity onPress={
+                () => navigation.navigate("Home")
+                // login
+                } className="border-4 p-1 w-1/2 h-10 rounded-[20px] items-center bg-[#006738]" style={styles.btnDes}>
+                  <Text className="text-white text-[18px]" style={styles.btnText}>SIGN IN</Text>
+              </TouchableOpacity>
+          </View>
 
+          <View className="flex-column" style={styles.etcBtn}>
             <TouchableOpacity className="border-transparent ">
                 <Text className="text-white text-[16px]" style={styles.btnText1}>Forgot Password?</Text>
             </TouchableOpacity>
@@ -123,7 +125,7 @@ const styles = StyleSheet.create({
   container:{
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     flex:1,
-    backgroundColor:"#006738",
+    backgroundColor:"#fff",
   },
   background:{
     flex:1
@@ -143,32 +145,29 @@ const styles = StyleSheet.create({
     maxWidth: "60%",
     minHeight: "50%",
     maxHeight: "50%",
-    alignSelf:"flex-end",
-    marginHorizontal:-10
+    alignSelf:"center",
+    marginTop:-20
   },
 
   content:{
-    marginTop:150,
     flexGrow: .2,
     justifyContent: 'space-evenly',
   },
 
   inputFields:{
-    marginVertical:-20,
-    alignItems: "flex-end",
+    marginTop:25,
+    alignItems: "center",
     flexGrow: .2,
     justifyContent: 'space-evenly',
-    paddingBottom: 10
+    paddingBottom: 10,
+    height: "25%"
   },
   sText:{
     fontFamily: 'Poppins_500Medium',
   },
 
   borderStyle:{
-    borderColor: '#fff',
-    backgroundColor: '#fff',
-    borderBottomLeftRadius: 20,
-    borderTopLeftRadius: 20,
+    borderColor:'#006738',
     marginTop:10,
   },
   
@@ -177,8 +176,13 @@ const styles = StyleSheet.create({
     padding:1,
   },
 
+  btnDvd:{
+    marginTop:-80
+  },
+
   btnDes:{
-    borderColor:'#006738'
+    borderColor:'#006738',
+    alignSelf:'center'
   },
   btnText:{  
     fontFamily: 'Poppins_600SemiBold',
@@ -186,20 +190,20 @@ const styles = StyleSheet.create({
   },
 
   etcBtn:{
-    alignSelf: 'flex-end',
+    alignSelf: 'center',
     width:"50%",
-    paddingTop: 10,
+    height:"50%",
     flexGrow: .1,
     alignItems: "center",
-    marginVertical: -150,
+
+    marginTop: 20
   },
   nAc:{
     fontFamily: 'Poppins_500Medium',
   },
   btnText1:{
     fontFamily: 'Poppins_500Medium',
-    color: "#fff",
-    marginLeft: 5
+    color: "#006738",
   }
 
 })
