@@ -59,7 +59,7 @@ const LoginScreen = () => {
     .then((response) =>{
       console.log(response[0].essage);
       response[0].Message == "Success" ? 
-        navigation.dispatch(StackActions.replace('Home')) :  Alert.alert(response[0].Message);  
+        navigation.dispatch(StackActions.replace('Home',{ID})) :  Alert.alert(response[0].Message);  
     })
     .catch((error)=>console.log(error));
   }
@@ -87,8 +87,8 @@ const LoginScreen = () => {
           </View>
 
           <TouchableOpacity onPress={
-            () => navigation.navigate("Home")
-            // login
+            // () => navigation.navigate("Home")
+            login
             } className="border-2 p-2 w-4/12 h-10 rounded-[10px] items-center bg-[#006738] border-transparent -my-32">
               <Text className="text-white text-[18px]" style={styles.btnText}>SIGN IN</Text>
           </TouchableOpacity>

@@ -1,33 +1,41 @@
-import React, { useEffect, useState } from 'react';
-import { FlatList, Animated, TouchableOpacity, Text, StyleSheet, Image, useWindowDimensions, View  } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { FlatList, Animated, TouchableOpacity, Text, StyleSheet, Image, useWindowDimensions, View, Dimensions, Platform  } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
-const HomeContent = ({ showMenu, scaleValue, offsetValue, closeButtonOffset, setShowMenu }) => {
+
+const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOffset, setShowMenu }) => {
     const styles = useStyles();
     const navigation = useNavigation();
     const [recentLog, setRecentLog] = useState([]);
+    const [dateToday, setDateToday] = useState([]);
 
     useEffect(() => {
       ReadRecent();
+      getDate();
       return () => {
       }
-    }, [])
+    }, [userID, dateToday])
     
-    const ReadRecent = (date, time, uid) =>{
+    const getDate = () => {
+      const currentDate = new Date();
+      const year = currentDate.getFullYear();
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+      const day = String(currentDate.getDate()).padStart(2, '0');
+      const formattedDate = `${year}-${month}-${day}`;
+      setDateToday(formattedDate);
+    }
+
+    const ReadRecent = () =>{
       const APIURL = "http://192.168.111.95/API/ReadRecentTimeIn.php";
       const headers = {
         'Accept':'application/json',
         'Content-Type':'application.json'
       }
       let data = {
-          ID: uid ,//uuid v4
-          roomID: uid,
-          instructorID: "1000",
-          timeInDate: date,
-          timeInHour: time,
+          userID: userID ,
+          dateToday: dateToday,
         }
-        
        fetch(APIURL,{
         method: 'POST',
         headers: headers,
@@ -64,24 +72,27 @@ const HomeContent = ({ showMenu, scaleValue, offsetValue, closeButtonOffset, set
               </TouchableOpacity>   
             </View>
             <View style={{flexGrow: 0.1, backgroundColor: '#006738', flexDirection: 'row', justifyContent: 'space-evenly', alignItems:'center'}}>
-              <TouchableOpacity onPress={()=>ReadRecent()} style={{padding:10, backgroundColor: 'white'}}>
+              <TouchableOpacity style={{padding:10, backgroundColor: 'white'}}>
                   <Text>Recent History</Text>
               </TouchableOpacity> 
-              <TouchableOpacity onPress={()=>ReadRecent()} style={{padding:10, backgroundColor: 'white'}}>
+              <TouchableOpacity style={{padding:10, backgroundColor: 'white'}}>
                   <Text>All History</Text>
               </TouchableOpacity> 
             </View>
-            <View style={{flexGrow: 1}}>
-            <FlatList 
-              style={styles.containerShadow}
-              data={recentLog}
-              keyExtractor={item => item.ID}
-              renderItem={({ item: data }) => (
-                <View style={{ padding: 5 }}>
-                  <Text>{data.ID}</Text>
-                </View>
-              )}
-            />
+            <View style={{flexGrow: 1, backgroundColor: 'powderblue'}}>
+              <View>
+                <FlatList 
+                  style={styles.containerShadow}
+                  data={recentLog}
+                  keyExtractor={item => item.ID}
+                  renderItem={({ item: data }) => (
+                    <View style={{ padding: 5 }}>
+                      <Text>Date: {data.TimeIn_Date}</Text>
+                      <Text>Time: {data.TimeIn_Time}</Text>
+                    </View>
+                  )}
+                />
+              </View>            
             </View>
           </Animated.View>
         </Animated.View>
