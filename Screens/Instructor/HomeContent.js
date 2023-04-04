@@ -67,7 +67,7 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
     }
 
     const ReadRecent = () =>{
-      const APIURL = "http://192.168.111.95/API/ReadRecentTimeIn.php";
+      const APIURL = "http://192.168.1.2/API/ReadRecentTimeIn.php";
       const headers = {
         'Accept':'application/json',
         'Content-Type':'application.json'
