@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { StackActions, useRoute } from '@react-navigation/native';
 import * as SplashScreen from 'expo-splash-screen'
+import { LinearGradient } from 'expo-linear-gradient';
+
 import {
   useFonts,
   Poppins_400Regular,
@@ -66,46 +68,51 @@ const LoginScreen = () => {
 
   if (!isReady || !fontsLoaded) { return null;}
   return (
-    <KeyboardAvoidingView style={styles.container}>
-    <ImageBackground className="absolute inset-x-0 top-0 " source={require('../images/loginBG.png')} style={styles.bgImage}>
-    
-    <View className="flex-column" style={styles.container}>
-      <View className="items-center my-32">
-        <Text style={styles.logInWc} className="self-end -left-10" >WELCOME</Text>
-          <TouchableOpacity>
-            <Image className="my-24" source={require('../images/gBtn.png')} style={styles.gbtn}/>
-          </TouchableOpacity>
-          <View>
-            <Text style={styles.sText} className="-my-44">Or</Text>
+    <KeyboardAvoidingView style={styles.container}
+    >
+      <ImageBackground source={require('../images/CLI_BDG.png')} style={styles.cliBg}>
+          {/* <Image source={require('../images/lormaLogo.png')} style={styles.lolma}/> */}
+      <LinearGradient
+        // Background Linear Gradient
+        start={{ x: 1, y: -.9}}
+        end={{ x: 1, y: .9}}
+        colors={['#fff','transparent','#fff']}
+        style={styles.background}
+      >
+          <View className="flex-column" style={styles.content}>
+            <Image source={require('../images/lormaLogo.png')}  style={styles.lolma}/>
+            <View style={styles.inputFields} className={'flex-column'}>
+              <View  className="border-b-4 w-1/2  p-1 "style={styles.borderStyle}>
+                  <TextInput className="text-[18px] text-center " value={ID} onChangeText={text => setID(text)} placeholder="ENTER ID"  placeholderTextColor="#006738" style={styles.inputTxt}/>
+              </View>
+              <View className="border-b-4 w-1/2  p-1" style={styles.borderStyle}>
+                  <TextInput className="text-[18px] text-center" value={password} onChangeText={text => setPassword(text)} placeholder="PASSWORD" secureTextEntry placeholderTextColor="#006738" style={styles.inputTxt}/>
+              </View>
+            </View>
           </View>
 
-          <View className="border-2 w-2/4 p-1 h-10 rounded-[8px] -my-32" style={styles.borderColor}>
-              <TextInput className="text-[18px] text-center" value={ID} onChangeText={text => setID(text)} placeholder="ENTER ID"  placeholderTextColor="#006738" style={styles.inputTxt}/>
+          <View className="w-full" style={styles.btnDvd}>
+              <TouchableOpacity onPress={
+                // () => navigation.navigate("Home")
+                login
+                } className="border-4 p-1 w-1/2 h-10 rounded-[20px] items-center bg-[#006738]" style={styles.btnDes}>
+                  <Text className="text-white text-[18px]" style={styles.btnText}>SIGN IN</Text>
+              </TouchableOpacity>
           </View>
-          <View className="border-2 w-1/2 h-10 p-1 rounded-[8px] my-36" style={styles.borderColor}>
-              <TextInput className="w-full text-[18px] text-center" value={password} onChangeText={text => setPassword(text)} placeholder="PASSWORD" secureTextEntry placeholderTextColor="#006738" style={styles.inputTxt}/>
-          </View>
-
-          <TouchableOpacity onPress={
-            // () => navigation.navigate("Home")
-            login
-            } className="border-2 p-2 w-4/12 h-10 rounded-[10px] items-center bg-[#006738] border-transparent -my-32">
-              <Text className="text-white text-[18px]" style={styles.btnText}>SIGN IN</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity className="items-centerborder-transparent my-40">
-              <Text className="text-white text-[16px]" style={styles.btnText1}>Forgot Password?</Text>
-          </TouchableOpacity>
-
-          <View className="flex-row  -top-36 ">
-            <Text className="text-[16px] text-black">Need an Account?</Text>  
-            <TouchableOpacity onPress={() => navigation.navigate('SignUp')} className="items-center ">
-                <Text className="text-[16px]" style={styles.btnText1}>Sign Up</Text>
+          <View className="flex-column" style={styles.etcBtn}>
+            <TouchableOpacity className="border-transparent ">
+                <Text className="text-white text-[16px]" style={styles.btnText1}>Forgot Password?</Text>
             </TouchableOpacity>
+
+            <View className="flex-row ">
+              <Text className="text-[16px] text-black" style={styles.nAc}>Need an Account?</Text>  
+              <TouchableOpacity onPress={() => navigation.navigate('SignUp')} className="items-center ">
+                  <Text className="text-[16px]" style={styles.btnText1}>Sign Up</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-      </View>
-    </View>
-    </ImageBackground>
+      </LinearGradient>
+      </ImageBackground>
     </KeyboardAvoidingView>
   )
 }
@@ -117,44 +124,91 @@ const styles = StyleSheet.create({
   container:{
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     flex:1,
+    backgroundColor:"#fff",
   },
 
-  bgImage:{
-    width: "100%",
-    hieght: "100%",
+  // Application Login Background
+  background:{
+    flex:1
   },
-
-  logInWc:{
-    fontFamily: 'Poppins_700Bold',
-    color: 'white',
-    fontSize: 55
-  },
-
-  gbtn:{
-    width: "60%",
-    height: undefined,
+  cliBg:{
     aspectRatio: 1,
-    resizeMode: 'contain'
+    resizeMode: 'cover',
+    maxWidth: "100%",
+    maxHeight: "100%",
+    alignSelf:"flex-start",
+    marginTop:-50
+  },
+  lolma:{
+    aspectRatio: 1,
+    resizeMode: 'contain',
+    minWidth: "50%",
+    maxWidth: "60%",
+    minHeight: "50%",
+    maxHeight: "50%",
+    alignSelf:"center",
+    marginTop:-20
+  },
+  //
+
+
+  content:{
+    flexGrow: .2,
+    justifyContent: 'space-evenly',
   },
 
-  sText:{
-    fontFamily: 'Poppins_500Medium',
+  //Input Fields
+  inputFields:{
+    marginTop:25,
+    alignItems: "center",
+    flexGrow: .2,
+    justifyContent: 'space-evenly',
+    paddingBottom: 10,
+    height: "25%"
   },
-
-  borderColor:{
-    borderColor: "#006738"
-  },
-  
   inputTxt:{
     fontFamily: 'Poppins_600SemiBold',
+    padding:1,
   },
-  btnText:{
+  //Input Text Design
+  borderStyle:{
+    borderColor:'#006738',
+    marginTop:10,
+  },
+  //  
+  //
+
+  //Buttons
+  btnDvd:{
+    marginTop:-80
+  },
+  //Button Designs
+  btnDes:{
+    borderColor:'#006738',
+    alignSelf:'center'
+  },
+  btnText:{  
     fontFamily: 'Poppins_600SemiBold',
+    color: '#fff',
+  },
+  //
+  //
+  
+  //Buttons for Creating Account and Forgot Password (TEXT BUTTONS
+  etcBtn:{
+    alignSelf: 'center',
+    width:"50%",
+    height:"50%",
+    flexGrow: .1,
+    alignItems: "center",
+    marginTop: 20
+  },
+  nAc:{
+    fontFamily: 'Poppins_500Medium',
   },
   btnText1:{
     fontFamily: 'Poppins_500Medium',
     color: "#006738",
-    marginLeft: 5
   }
-
+  //
 })

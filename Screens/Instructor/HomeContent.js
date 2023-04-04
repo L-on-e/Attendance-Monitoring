@@ -2,16 +2,46 @@ import React, { useEffect, useRef, useState } from 'react';
 import { FlatList, Animated, TouchableOpacity, Text, StyleSheet, Image, useWindowDimensions, View, Dimensions, Platform, ScrollView  } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import * as SplashScreen from 'expo-splash-screen'
+import {
+  useFonts,
+  Poppins_400Regular,
+  Poppins_500Medium,
+  Poppins_600SemiBold,
+  Poppins_700Bold,
+  Poppins_800ExtraBold,
+  Poppins_900Black,
+} from '@expo-google-fonts/poppins';
 
 
 const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOffset, setShowMenu }) => {
-    const styles = useStyles();
     const navigation = useNavigation();
     const [recentLog, setRecentLog] = useState([]);
     const [allLog, setAllLog] = useState([]);
     const [dateToday, setDateToday] = useState([]);
     const [showAllHistory, setshowAllHistory] = useState(false);
     const scrollViewRef = useRef();
+
+    const [isReady, setIsReady] = useState(false);
+
+    useEffect(() => {
+      async function prepare() {
+        try { await SplashScreen.preventAutoHideAsync();} 
+        catch (e) {console.warn(e);} 
+        finally { setIsReady(true);}
+      }
+      prepare();
+      return () => { SplashScreen.hideAsync(); };
+    }, [isReady]);
+    
+    let [fontsLoaded] = useFonts({
+      Poppins_400Regular,
+      Poppins_500Medium,
+      Poppins_600SemiBold,
+      Poppins_700Bold,
+      Poppins_800ExtraBold,
+      Poppins_900Black,
+    });
 
     const handlePress = (pageIndex) => {
       scrollViewRef.current.scrollTo({
@@ -63,7 +93,7 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
       })
       .catch((error)=>console.log(error));
     }
-    
+    if (!isReady || !fontsLoaded) { return null;}
     return (
         <Animated.View style={[styles.contentContainer,{ borderRadius: showMenu ? 15 : 0, transform: [{ scale: scaleValue }, { translateX: offsetValue }] }]}>
           <Animated.View style={{ transform: [{ translateY: closeButtonOffset }], flexGrow: 1 }}>
@@ -75,15 +105,24 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
                 setShowMenu(!showMenu);
               }}>
                 <AntDesign name={showMenu ? 'menu-unfold' : 'menu-fold'} size={25}/>
-                <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'black', paddingLeft: 15}}>Home</Text> 
+                <Text style={styles.titHome}>Home</Text> 
             </TouchableOpacity>
-            <View style={{flexGrow:0.05}}>
-              <TouchableOpacity onPress={()=>navigation.navigate('TimeIn')}>
-                  <Text>Time In</Text>
-              </TouchableOpacity>   
-              <TouchableOpacity onPress={()=>navigation.navigate('TimeOut')}>
-                  <Text>Time Out</Text>
-              </TouchableOpacity>   
+            <View style={styles.timeInOut}>
+
+              <View style={styles.tIOcontainer}>
+                <Text className="text-lg" style={styles.tioTEXT}>Click Here to </Text>
+                <TouchableOpacity onPress={()=>navigation.navigate('TimeIn')}>
+                    <Text style={styles.tioTEXTbtn} className="text-lg">Time In</Text>
+                </TouchableOpacity>   
+              </View>
+              
+              <View style={styles.tIOcontainer}>
+                <Text  className="text-lg" style={styles.tioTEXT}>Click Here to </Text>
+                <TouchableOpacity onPress={()=>navigation.navigate('TimeOut')}>
+                    <Text style={styles.tioTEXTbtn} className="text-lg ">Time Out</Text>
+                </TouchableOpacity>
+              </View>
+
             </View>
             <View style={{flexGrow: 0.1, flexDirection: 'row'}}>
               <TouchableOpacity onPress={()=>{setshowAllHistory(false),handlePress(0)}} style={{flexGrow: 1, justifyContent: 'center',
@@ -166,39 +205,70 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
     };
 
 export default HomeContent
+  
+  const styles = StyleSheet.create({
+    contentContainer: {
+      flexGrow: 1,
+      backgroundColor: 'white',
+      position: 'absolute',
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      paddingHorizontal: 15,
+      paddingVertical: 20,
+    },
+    containerShadow: {
+      padding: 15,
+      backgroundColor: "white",
+      marginHorizontal: 4,
+      marginVertical: 15,
+      shadowColor: "#000",
+      shadowOffset:{
+          width:0,
+          height:1,
+      },
+      shadowOpacity:0.2,
+      shadowRadius:1.41,
+      elevation:2,
+      width: Dimensions.get('window').width - 40,
+  },
+  carouselContentContainer: {
+    flexGrow: 1,
+    overflow: 'hidden',
+  },
+    
+    //HOME TITLE
+    titHome:{
+      fontSize: 30, 
+      color: '#006738', 
+      paddingLeft: 15, 
+      fontFamily:'Poppins_700Bold'
+    },
+    //
 
-const useStyles = () => {
-    const { width, height } = useWindowDimensions(); 
-    return styles = StyleSheet.create({
-        contentContainer: {
-          flexGrow: 1,
-          backgroundColor: 'white',
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          paddingHorizontal: 15,
-          paddingVertical: 20,
-        },
-        containerShadow: {
-          padding: 15,
-          backgroundColor: "white",
-          marginHorizontal: 4,
-          marginVertical: 15,
-          shadowColor: "#000",
-          shadowOffset:{
-              width:0,
-              height:1,
-          },
-          shadowOpacity:0.2,
-          shadowRadius:1.41,
-          elevation:2,
-          width: Dimensions.get('window').width - 40,
-      },
-      carouselContentContainer: {
-        flexGrow: 1,
-        overflow: 'hidden',
-      },
-    });
-  }
+    //TIME IN TIME OUT BUTTON
+    timeInOut:{
+      flexGrow:0.1,
+      alignItems:'center',
+      justifyContent: 'center',
+      justifyContent:'space-evenly'
+    },
+
+    tIOcontainer:{
+      flexDirection:'row',
+      alignItems:'center',
+      justifyContent:'center'
+    },
+
+    tioTEXT:{
+      fontFamily:'Poppins_500Medium'
+    },
+
+    tioTEXTbtn:{
+      fontFamily:'Poppins_600SemiBold',
+      color:'#006738'
+    },
+    //
+
+  })
