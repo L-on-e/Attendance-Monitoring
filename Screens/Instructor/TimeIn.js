@@ -26,8 +26,8 @@ const TimeIn = () => {
     //   console.log(data);
     };
   
-    const InsertDB = (date, time, uid) =>{
-      const APIURL = "http://192.168.1.17/API/TimeIn.php";
+    const InsertDB = async(date, time, uid) =>{
+      const APIURL = "http://192.168.111.95/API/TimeIn.php";
       const headers = {
         'Accept':'application/json',
         'Content-Type':'application.json'
@@ -40,7 +40,7 @@ const TimeIn = () => {
           timeInHour: time,
         }
         
-      fetch(APIURL,{
+      await fetch(APIURL,{
         method: 'POST',
         headers: headers,
         body: JSON.stringify(data),

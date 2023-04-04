@@ -22,7 +22,6 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
     const [showAllHistory, setshowAllHistory] = useState(false);
     const scrollViewRef = useRef();
 
-
     const [isReady, setIsReady] = useState(false);
 
     useEffect(() => {
@@ -123,7 +122,7 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
                     <Text style={styles.tioTEXTbtn} className="text-lg ">Time Out</Text>
                 </TouchableOpacity>
               </View>
-                 
+
             </View>
             <View style={{flexGrow: 0.1, flexDirection: 'row'}}>
               <TouchableOpacity onPress={()=>{setshowAllHistory(false),handlePress(0)}} style={{flexGrow: 1, justifyContent: 'center',
@@ -208,7 +207,6 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
 export default HomeContent
   
   const styles = StyleSheet.create({
-
     contentContainer: {
       flexGrow: 1,
       backgroundColor: 'white',

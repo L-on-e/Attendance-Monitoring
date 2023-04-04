@@ -42,7 +42,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState(null);
 
   const login = () =>{
-    const APIURL = "http://192.168.1.17/API/Login.php";
+    const APIURL = "http://192.168.111.95/API/Login.php";
     const headers = {
       'Accept':'application/json',
       'Content-Type':'application.json'
@@ -61,7 +61,7 @@ const LoginScreen = () => {
     .then((response) =>{
       console.log(response[0].essage);
       response[0].Message == "Success" ? 
-        navigation.dispatch(StackActions.replace('Home')) :  Alert.alert(response[0].Message);  
+        navigation.dispatch(StackActions.replace('Home',{ID})) :  Alert.alert(response[0].Message);  
     })
     .catch((error)=>console.log(error));
   }
@@ -99,7 +99,6 @@ const LoginScreen = () => {
                   <Text className="text-white text-[18px]" style={styles.btnText}>SIGN IN</Text>
               </TouchableOpacity>
           </View>
-
           <View className="flex-column" style={styles.etcBtn}>
             <TouchableOpacity className="border-transparent ">
                 <Text className="text-white text-[16px]" style={styles.btnText1}>Forgot Password?</Text>
