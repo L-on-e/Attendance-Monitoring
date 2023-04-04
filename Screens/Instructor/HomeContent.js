@@ -155,7 +155,6 @@ export default HomeContent
       left: 0,
       right: 0,
       paddingHorizontal: 15,
-      paddingVertical: 20,
     },
 
     containerShadow: {
