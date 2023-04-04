@@ -127,6 +127,8 @@ const styles = StyleSheet.create({
     flex:1,
     backgroundColor:"#fff",
   },
+
+  // Application Login Background
   background:{
     flex:1
   },
@@ -148,12 +150,15 @@ const styles = StyleSheet.create({
     alignSelf:"center",
     marginTop:-20
   },
+  //
+
 
   content:{
     flexGrow: .2,
     justifyContent: 'space-evenly',
   },
 
+  //Input Fields
   inputFields:{
     marginTop:25,
     alignItems: "center",
@@ -162,24 +167,23 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     height: "25%"
   },
-  sText:{
-    fontFamily: 'Poppins_500Medium',
-  },
-
-  borderStyle:{
-    borderColor:'#006738',
-    marginTop:10,
-  },
-  
   inputTxt:{
     fontFamily: 'Poppins_600SemiBold',
     padding:1,
   },
+  //Input Text Design
+  borderStyle:{
+    borderColor:'#006738',
+    marginTop:10,
+  },
+  //  
+  //
 
+  //Buttons
   btnDvd:{
     marginTop:-80
   },
-
+  //Button Designs
   btnDes:{
     borderColor:'#006738',
     alignSelf:'center'
@@ -188,14 +192,16 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_600SemiBold',
     color: '#fff',
   },
-
+  //
+  //
+  
+  //Buttons for Creating Account and Forgot Password (TEXT BUTTONS
   etcBtn:{
     alignSelf: 'center',
     width:"50%",
     height:"50%",
     flexGrow: .1,
     alignItems: "center",
-
     marginTop: 20
   },
   nAc:{
@@ -205,5 +211,5 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_500Medium',
     color: "#006738",
   }
-
+  //
 })
