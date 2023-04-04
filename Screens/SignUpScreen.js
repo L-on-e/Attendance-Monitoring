@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as SplashScreen from 'expo-splash-screen'
+import { LinearGradient } from 'expo-linear-gradient';
 import {
   useFonts,
   Poppins_400Regular,
@@ -91,9 +92,16 @@ const SignUpScreen = () => {
   
   if (!isReady || !fontsLoaded) { return null;}
   return (
-    <KeyboardAvoidingView className="items-center" style={styles.container}>
-  
-      <TouchableOpacity onPress={()=>navigation.goBack()} className="self-start" style={styles.backArrow}>
+   
+      <LinearGradient
+        // Background Linear Gradient
+        start={{ x: 1, y: .0}}
+        end={{ x: 1, y: 1}}
+        colors={['#fff','transparent','#006738']}
+        style={styles.background}
+      >
+
+<TouchableOpacity onPress={()=>navigation.goBack()} className="self-start" style={styles.backArrow}>
           <Ionicons name='arrow-back' size={35}/>
       </TouchableOpacity>
       
@@ -103,7 +111,7 @@ const SignUpScreen = () => {
       </View>
 
 
-      <View style={styles.inputLayout} className="padding-">
+      <View style={styles.inputLayout} className="flex-column items-center">
         <View className="border-2 w-64 p-1 h-10 rounded-[12px]" style={styles.borderColor}>
           <TextInput className="w-full text-[18px] text-center" onChangeText={text=>setID(text)} placeholder="ID" placeholderTextColor="#006738" style={styles.inputTxt}/> 
         </View>
@@ -124,23 +132,28 @@ const SignUpScreen = () => {
           <TextInput className="w-full text-[18px] text-center" secureTextEntry onChangeText={text=>setPassword(text)} placeholder="PASSWORD" placeholderTextColor="#006738" style={styles.inputTxt}/>
         </View>
 
-        <View className="border-2 64 p-1 h-10 rounded-[12px]" style={styles.borderColor}>
+        <View className="border-2 w-64 p-1 h-10 rounded-[12px]" style={styles.borderColor}>
           <TextInput className="w-full text-[18px] text-center" secureTextEntry onChangeText={text=>setConfirmPassword(text)} placeholder="CONFIRM PASSWORD" placeholderTextColor="#006738" style={styles.inputTxt}/>
         </View>
       </View>
 
-      <TouchableOpacity className="border-2 p-2 w-1/2 h-10 rounded-[10px] items-center bg-[#006738] border-transparent" style={styles.creatBTn}>
-        <Text className="text-white text-[18px]" onPress={()=>ValidateCredentials()} style={styles.btnText}>CREATE ACCOUNT</Text>
-      </TouchableOpacity>
+      <View className="flex-column items-center" style={styles.buttonsDVD}>
+        <TouchableOpacity className="border-2 p-2 w-1/2 h-10 rounded-[10px] items-center bg-[#006738] border-transparent" style={styles.creatBTn}>
+          <Text className="text-white text-[18px]" onPress={()=>ValidateCredentials()} style={styles.btnText}>CREATE ACCOUNT</Text>
+        </TouchableOpacity>
 
 
-      <View className="flex-row"  style={styles.btnBfText}>
-            <Text className="text-[16px] text-black">Have an Account?</Text>  
-            <TouchableOpacity onPress={() => navigation.goBack()} className="items-center ">
-                <Text className="text-[16px]" style={styles.btnText1}>Sign In</Text>
-            </TouchableOpacity>
+        <View className="flex-row"  style={styles.btnBfText}>
+              <Text className="text-[16px] text-black" style={styles.btnText2}>Have an Account?</Text>  
+              <TouchableOpacity onPress={() => navigation.goBack()} className="items-center ">
+                  <Text className="text-[16px]" style={styles.btnText1}>Sign In</Text>
+              </TouchableOpacity>
+        </View>
       </View>
-    </KeyboardAvoidingView>
+
+
+      </LinearGradient>
+    
   )
 }
 
@@ -148,10 +161,12 @@ export default SignUpScreen
 
 const styles = StyleSheet.create({
 
-  container:{
+
+  background:{
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-    flex:1,
+    flex:1
   },
+
   createHead:{
     marginTop: 40,
     fontFamily: 'Poppins_600SemiBold',
@@ -181,13 +196,22 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_600SemiBold',
   },
   btnText1:{
+    fontFamily: 'Poppins_600SemiBold',
+    color: "#fff",
+    marginLeft: 5
+  },
+  btnText2:{
     fontFamily: 'Poppins_500Medium',
-    color: "#006738",
+    color: "black",
     marginLeft: 5
   },
   borderColor:{
     borderColor: "#006738",
     marginTop:25
   },
+
+  buttonsDVD:{
+    marginTop:30
+  }
 
 });
