@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FlatList, Animated, TouchableOpacity, Text, StyleSheet, Image, useWindowDimensions, View, Dimensions, Platform  } from 'react-native';
+import { FlatList, Animated, TouchableOpacity, Text, StyleSheet, Image, useWindowDimensions, View, Dimensions, Platform, ScrollView  } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as SplashScreen from 'expo-splash-screen'
-
 import {
   useFonts,
   Poppins_400Regular,
@@ -18,7 +17,10 @@ import {
 const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOffset, setShowMenu }) => {
     const navigation = useNavigation();
     const [recentLog, setRecentLog] = useState([]);
+    const [allLog, setAllLog] = useState([]);
     const [dateToday, setDateToday] = useState([]);
+    const [showAllHistory, setshowAllHistory] = useState(false);
+    const scrollViewRef = useRef();
 
 
     const [isReady, setIsReady] = useState(false);
@@ -42,12 +44,19 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
       Poppins_900Black,
     });
 
+    const handlePress = (pageIndex) => {
+      scrollViewRef.current.scrollTo({
+        x: pageIndex * Dimensions.get('window').width,
+        animated: true,
+      });
+    };
+
     useEffect(() => {
-      ReadRecent();
       getDate();
+      ReadRecent();
       return () => {
       }
-    }, [userID, dateToday])
+    }, [userID, dateToday, showAllHistory])
     
     const getDate = () => {
       const currentDate = new Date();
@@ -66,7 +75,7 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
       }
       let data = {
           userID: userID ,
-          dateToday: dateToday,
+          dateToday: showAllHistory == false ? dateToday : "",
         }
        fetch(APIURL,{
         method: 'POST',
@@ -76,12 +85,15 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
       .then((response) =>
         response.json())
       .then((response) =>{
-        setRecentLog(response);
-        // .flatMap((inner)=>setRecentLog(inner))
+        const formattedData = response.map((record) => {
+          const timeIn = `${record.TimeIn_Date} ${record.TimeIn_Time}`;
+          const timeOut = `${record.TimeOut_Date} ${record.TimeOut_Time}`;
+          return { ID: record.ID, TimeIn: timeIn, TimeOut: timeOut };
+        });
+        showAllHistory == false ?( setRecentLog(formattedData), setAllLog([]) ):( setAllLog(formattedData), setRecentLog([]));
       })
       .catch((error)=>console.log(error));
     }
-    
     if (!isReady || !fontsLoaded) { return null;}
     return (
         <Animated.View style={[styles.contentContainer,{ borderRadius: showMenu ? 15 : 0, transform: [{ scale: scaleValue }, { translateX: offsetValue }] }]}>
@@ -93,7 +105,7 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
                 Animated.timing(closeButtonOffset, { toValue: !showMenu ? -10 : 0, duration: 300, useNativeDriver: true }).start();
                 setShowMenu(!showMenu);
               }}>
-                <AntDesign name={showMenu ? 'menu-unfold' : 'menu-fold'} size={25} color="#006738"/>
+                <AntDesign name={showMenu ? 'menu-unfold' : 'menu-fold'} size={25}/>
                 <Text style={styles.titHome}>Home</Text> 
             </TouchableOpacity>
             <View style={styles.timeInOut}>
@@ -113,28 +125,80 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
               </View>
                  
             </View>
-            <View style={{flexGrow: 0.1, backgroundColor: '#006738', flexDirection: 'row', justifyContent: 'space-evenly', alignItems:'center'}}>
-              <TouchableOpacity style={{padding:10, backgroundColor: 'white'}}>
-                  <Text>Recent History</Text>
+            <View style={{flexGrow: 0.1, flexDirection: 'row'}}>
+              <TouchableOpacity onPress={()=>{setshowAllHistory(false),handlePress(0)}} style={{flexGrow: 1, justifyContent: 'center',
+                borderTopRightRadius: 10, borderTopLeftRadius:10,
+                backgroundColor: showAllHistory==true?'#fff':'#006738'}}>
+                  <Text style={{textAlign: 'center'}}>Recent History</Text>
               </TouchableOpacity> 
-              <TouchableOpacity style={{padding:10, backgroundColor: 'white'}}>
-                  <Text>All History</Text>
+              <TouchableOpacity onPress={()=>{setshowAllHistory(true),handlePress(1)}} style={{flexGrow: 1, justifyContent: 'center',
+                borderTopRightRadius: 10, borderTopLeftRadius:10,
+                backgroundColor: showAllHistory==true?'#006738':'#fff'}}>
+                  <Text style={{textAlign: 'center'}}>All History</Text>
               </TouchableOpacity> 
             </View>
-            <View style={{flexGrow: 1, backgroundColor: 'powderblue'}}>
-              <View>
+            <View style={{flexGrow: 1}}>
+              <ScrollView 
+                ref={scrollViewRef}
+                horizontal
+                pagingEnabled
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.carouselContentContainer}>
                 <FlatList 
                   style={styles.containerShadow}
                   data={recentLog}
                   keyExtractor={item => item.ID}
                   renderItem={({ item: data }) => (
-                    <View style={{ padding: 5 }}>
-                      <Text>Date: {data.TimeIn_Date}</Text>
-                      <Text>Time: {data.TimeIn_Time}</Text>
+                    <View>
+                      {data.TimeOut && (
+                        <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
+                          <View style={{ flexDirection: 'column' }}>
+                            <Text>OUT</Text>
+                            <Text>{data.TimeOut}</Text>
+                          </View>
+                          <View style={{ borderRadius: 100, backgroundColor: 'red', height: 20, width: 20 }}/>
+                        </View>
+                      )}
+                      {data.TimeIn && (
+                        <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
+                          <View style={{ flexDirection: 'column' }}>
+                            <Text>IN</Text>
+                            <Text>{data.TimeIn}</Text>
+                          </View>
+                          <View style={{ borderRadius: 100, backgroundColor: 'green', height: 20, width: 20 }}/>
+                        </View>
+                      )}
                     </View>
                   )}
                 />
-              </View>            
+                <FlatList 
+                  style={styles.containerShadow}
+                  data={allLog}
+                  keyExtractor={item => item.ID}
+                  renderItem={({ item: data }) => (
+                    <View>
+                      {data.TimeOut && (
+                        <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
+                          <View style={{ flexDirection: 'column' }}>
+                            <Text>Out</Text>
+                            <Text>{data.TimeOut}</Text>
+                          </View>
+                          <View style={{ borderRadius: 100, backgroundColor: 'red', height: 20, width: 20 }}/>
+                        </View>
+                      )}
+                      {data.TimeIn && (
+                        <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
+                          <View style={{ flexDirection: 'column' }}>
+                            <Text>IN</Text>
+                            <Text>{data.TimeIn}</Text>
+                          </View>
+                          <View style={{ borderRadius: 100, backgroundColor: 'green', height: 20, width: 20 }}/>
+                        </View>
+                      )}
+                    </View>
+                  )}
+                />
+              </ScrollView>            
             </View>
           </Animated.View>
         </Animated.View>
@@ -142,10 +206,9 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
     };
 
 export default HomeContent
-
-
+  
   const styles = StyleSheet.create({
-    //CONTAINER
+
     contentContainer: {
       flexGrow: 1,
       backgroundColor: 'white',
@@ -155,8 +218,8 @@ export default HomeContent
       left: 0,
       right: 0,
       paddingHorizontal: 15,
+      paddingVertical: 20,
     },
-
     containerShadow: {
       padding: 15,
       backgroundColor: "white",
@@ -170,9 +233,13 @@ export default HomeContent
       shadowOpacity:0.2,
       shadowRadius:1.41,
       elevation:2,
-    },
-    //
-
+      width: Dimensions.get('window').width - 40,
+  },
+  carouselContentContainer: {
+    flexGrow: 1,
+    overflow: 'hidden',
+  },
+    
     //HOME TITLE
     titHome:{
       fontSize: 30, 
@@ -205,4 +272,5 @@ export default HomeContent
       color:'#006738'
     },
     //
+
   })
