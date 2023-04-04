@@ -93,8 +93,8 @@ const LoginScreen = () => {
 
           <View className="w-full" style={styles.btnDvd}>
               <TouchableOpacity onPress={
-                () => navigation.navigate("Home")
-                // login
+                // () => navigation.navigate("Home")
+                login
                 } className="border-4 p-1 w-1/2 h-10 rounded-[20px] items-center bg-[#006738]" style={styles.btnDes}>
                   <Text className="text-white text-[18px]" style={styles.btnText}>SIGN IN</Text>
               </TouchableOpacity>
