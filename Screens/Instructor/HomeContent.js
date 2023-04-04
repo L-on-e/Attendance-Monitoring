@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FlatList, Animated, TouchableOpacity, Text, StyleSheet, Image, useWindowDimensions, View, Dimensions, Platform  } from 'react-native';
+import { FlatList, Animated, TouchableOpacity, Text, StyleSheet, Image, useWindowDimensions, View, Dimensions, Platform, ScrollView  } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
@@ -8,14 +8,24 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
     const styles = useStyles();
     const navigation = useNavigation();
     const [recentLog, setRecentLog] = useState([]);
+    const [allLog, setAllLog] = useState([]);
     const [dateToday, setDateToday] = useState([]);
+    const [showAllHistory, setshowAllHistory] = useState(false);
+    const scrollViewRef = useRef();
+
+    const handlePress = (pageIndex) => {
+      scrollViewRef.current.scrollTo({
+        x: pageIndex * Dimensions.get('window').width,
+        animated: true,
+      });
+    };
 
     useEffect(() => {
-      ReadRecent();
       getDate();
+      ReadRecent();
       return () => {
       }
-    }, [userID, dateToday])
+    }, [userID, dateToday, showAllHistory])
     
     const getDate = () => {
       const currentDate = new Date();
@@ -34,7 +44,7 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
       }
       let data = {
           userID: userID ,
-          dateToday: dateToday,
+          dateToday: showAllHistory == false ? dateToday : "",
         }
        fetch(APIURL,{
         method: 'POST',
@@ -44,8 +54,12 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
       .then((response) =>
         response.json())
       .then((response) =>{
-        setRecentLog(response);
-        // .flatMap((inner)=>setRecentLog(inner))
+        const formattedData = response.map((record) => {
+          const timeIn = `${record.TimeIn_Date} ${record.TimeIn_Time}`;
+          const timeOut = `${record.TimeOut_Date} ${record.TimeOut_Time}`;
+          return { ID: record.ID, TimeIn: timeIn, TimeOut: timeOut };
+        });
+        showAllHistory == false ?( setRecentLog(formattedData), setAllLog([]) ):( setAllLog(formattedData), setRecentLog([]));
       })
       .catch((error)=>console.log(error));
     }
@@ -71,28 +85,80 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
                   <Text>Time Out</Text>
               </TouchableOpacity>   
             </View>
-            <View style={{flexGrow: 0.1, backgroundColor: '#006738', flexDirection: 'row', justifyContent: 'space-evenly', alignItems:'center'}}>
-              <TouchableOpacity style={{padding:10, backgroundColor: 'white'}}>
-                  <Text>Recent History</Text>
+            <View style={{flexGrow: 0.1, flexDirection: 'row'}}>
+              <TouchableOpacity onPress={()=>{setshowAllHistory(false),handlePress(0)}} style={{flexGrow: 1, justifyContent: 'center',
+                borderTopRightRadius: 10, borderTopLeftRadius:10,
+                backgroundColor: showAllHistory==true?'#fff':'#006738'}}>
+                  <Text style={{textAlign: 'center'}}>Recent History</Text>
               </TouchableOpacity> 
-              <TouchableOpacity style={{padding:10, backgroundColor: 'white'}}>
-                  <Text>All History</Text>
+              <TouchableOpacity onPress={()=>{setshowAllHistory(true),handlePress(1)}} style={{flexGrow: 1, justifyContent: 'center',
+                borderTopRightRadius: 10, borderTopLeftRadius:10,
+                backgroundColor: showAllHistory==true?'#006738':'#fff'}}>
+                  <Text style={{textAlign: 'center'}}>All History</Text>
               </TouchableOpacity> 
             </View>
-            <View style={{flexGrow: 1, backgroundColor: 'powderblue'}}>
-              <View>
+            <View style={{flexGrow: 1}}>
+              <ScrollView 
+                ref={scrollViewRef}
+                horizontal
+                pagingEnabled
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.carouselContentContainer}>
                 <FlatList 
                   style={styles.containerShadow}
                   data={recentLog}
                   keyExtractor={item => item.ID}
                   renderItem={({ item: data }) => (
-                    <View style={{ padding: 5 }}>
-                      <Text>Date: {data.TimeIn_Date}</Text>
-                      <Text>Time: {data.TimeIn_Time}</Text>
+                    <View>
+                      {data.TimeOut && (
+                        <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
+                          <View style={{ flexDirection: 'column' }}>
+                            <Text>OUT</Text>
+                            <Text>{data.TimeOut}</Text>
+                          </View>
+                          <View style={{ borderRadius: 100, backgroundColor: 'red', height: 20, width: 20 }}/>
+                        </View>
+                      )}
+                      {data.TimeIn && (
+                        <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
+                          <View style={{ flexDirection: 'column' }}>
+                            <Text>IN</Text>
+                            <Text>{data.TimeIn}</Text>
+                          </View>
+                          <View style={{ borderRadius: 100, backgroundColor: 'green', height: 20, width: 20 }}/>
+                        </View>
+                      )}
                     </View>
                   )}
                 />
-              </View>            
+                <FlatList 
+                  style={styles.containerShadow}
+                  data={allLog}
+                  keyExtractor={item => item.ID}
+                  renderItem={({ item: data }) => (
+                    <View>
+                      {data.TimeOut && (
+                        <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
+                          <View style={{ flexDirection: 'column' }}>
+                            <Text>Out</Text>
+                            <Text>{data.TimeOut}</Text>
+                          </View>
+                          <View style={{ borderRadius: 100, backgroundColor: 'red', height: 20, width: 20 }}/>
+                        </View>
+                      )}
+                      {data.TimeIn && (
+                        <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
+                          <View style={{ flexDirection: 'column' }}>
+                            <Text>IN</Text>
+                            <Text>{data.TimeIn}</Text>
+                          </View>
+                          <View style={{ borderRadius: 100, backgroundColor: 'green', height: 20, width: 20 }}/>
+                        </View>
+                      )}
+                    </View>
+                  )}
+                />
+              </ScrollView>            
             </View>
           </Animated.View>
         </Animated.View>
@@ -128,6 +194,11 @@ const useStyles = () => {
           shadowOpacity:0.2,
           shadowRadius:1.41,
           elevation:2,
+          width: Dimensions.get('window').width - 40,
+      },
+      carouselContentContainer: {
+        flexGrow: 1,
+        overflow: 'hidden',
       },
     });
   }
