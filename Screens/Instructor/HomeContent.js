@@ -21,6 +21,7 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
     const [dateToday, setDateToday] = useState([]);
     const [showAllHistory, setshowAllHistory] = useState(false);
     const scrollViewRef = useRef();
+    const [scrollViewPage, setScrollViewPage] = useState(0);
 
     const [isReady, setIsReady] = useState(false);
 
@@ -148,7 +149,8 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
                 horizontal
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.carouselContentContainer}>
+                scrollEnabled={false}
+                >
                   {recentLog.length != 0 ?
                     (<>
                       <FlatList 
