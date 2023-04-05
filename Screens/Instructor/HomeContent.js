@@ -73,7 +73,7 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
         'Content-Type':'application.json'
       }
       let data = {
-          userID: userID ,
+          userID: userID,
           dateToday: showAllHistory == false ? dateToday : "",
         }
        fetch(APIURL,{
@@ -84,12 +84,18 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
       .then((response) =>
         response.json())
       .then((response) =>{
-        const formattedData = response.map((record) => {
+        
+        if((response.map(x=> x.Data)[0]) != 'No data'){
+          // response.map(x=> x.Data)[0] == "No data" ? console.log("goods"): console.log("no")
+          const formattedData = response.map((record) => {
           const timeIn = `${record.TimeIn_Date} ${record.TimeIn_Time}`;
           const timeOut = `${record.TimeOut_Date} ${record.TimeOut_Time}`;
           return { ID: record.ID, TimeIn: timeIn, TimeOut: timeOut };
-        });
-        showAllHistory == false ?( setRecentLog(formattedData), setAllLog([]) ):( setAllLog(formattedData), setRecentLog([]));
+          });
+            showAllHistory == false ? ( setRecentLog(formattedData), setAllLog([]) ): ( setAllLog(formattedData), setRecentLog([]));
+        }else{
+          setRecentLog([]);
+        }
       })
       .catch((error)=>console.log(error));
     }
@@ -143,60 +149,80 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.carouselContentContainer}>
-                <FlatList 
-                  style={styles.containerShadow}
-                  data={recentLog}
-                  keyExtractor={item => item.ID}
-                  renderItem={({ item: data }) => (
-                    <View>
-                      {data.TimeOut && (
-                        <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
-                          <View style={{ flexDirection: 'column' }}>
-                            <Text>OUT</Text>
-                            <Text>{data.TimeOut}</Text>
+                  {recentLog.length != 0 ?
+                    (<>
+                      <FlatList 
+                        style={styles.containerShadow}
+                        data={recentLog}
+                        keyExtractor={item => item.ID}
+                        renderItem={({ item: data }) => (
+                          <View>
+                              {data.TimeOut && (
+                                <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
+                                  <View style={{ flexDirection: 'column' }}>
+                                    <Text>OUT</Text>
+                                    <Text>{data.TimeOut}</Text>
+                                  </View>
+                                  <View style={{ borderRadius: 100, backgroundColor: 'red', height: 20, width: 20 }}/>
+                                </View>
+                              )}
+                              {data.TimeIn && (
+                                <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
+                                  <View style={{ flexDirection: 'column' }}>
+                                    <Text>IN</Text>
+                                    <Text>{data.TimeIn}</Text>
+                                  </View>
+                                  <View style={{ borderRadius: 100, backgroundColor: 'green', height: 20, width: 20 }}/>
+                                </View>
+                              )}
                           </View>
-                          <View style={{ borderRadius: 100, backgroundColor: 'red', height: 20, width: 20 }}/>
+                        )}
+                      />
+                    </>)
+                    :(<>
+                      <View style={styles.containerShadow}>
+                        <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
+                          <Text>No Data</Text>
                         </View>
-                      )}
-                      {data.TimeIn && (
-                        <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
-                          <View style={{ flexDirection: 'column' }}>
-                            <Text>IN</Text>
-                            <Text>{data.TimeIn}</Text>
+                      </View>
+                    </>)}
+                    {allLog.length != 0 ? 
+                    (<>
+                      <FlatList 
+                        style={styles.containerShadow}
+                        data={allLog}
+                        keyExtractor={item => item.ID}
+                        renderItem={({ item: data }) => (
+                          <View>
+                            {data.TimeOut && (
+                              <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
+                                <View style={{ flexDirection: 'column' }}>
+                                  <Text>Out</Text>
+                                  <Text>{data.TimeOut}</Text>
+                                </View>
+                                <View style={{ borderRadius: 100, backgroundColor: 'red', height: 20, width: 20 }}/>
+                              </View>
+                            )}
+                            {data.TimeIn && (
+                              <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
+                                <View style={{ flexDirection: 'column' }}>
+                                  <Text>IN</Text>
+                                  <Text>{data.TimeIn}</Text>
+                                </View>
+                                <View style={{ borderRadius: 100, backgroundColor: 'green', height: 20, width: 20 }}/>
+                              </View>
+                            )}
                           </View>
-                          <View style={{ borderRadius: 100, backgroundColor: 'green', height: 20, width: 20 }}/>
-                        </View>
-                      )}
+                        )}
+                      />
+                    </>)
+                    :(<>
+                    <View style={styles.containerShadow}>
+                      <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
+                        <Text>No Data</Text>
+                      </View>
                     </View>
-                  )}
-                />
-                <FlatList 
-                  style={styles.containerShadow}
-                  data={allLog}
-                  keyExtractor={item => item.ID}
-                  renderItem={({ item: data }) => (
-                    <View>
-                      {data.TimeOut && (
-                        <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
-                          <View style={{ flexDirection: 'column' }}>
-                            <Text>Out</Text>
-                            <Text>{data.TimeOut}</Text>
-                          </View>
-                          <View style={{ borderRadius: 100, backgroundColor: 'red', height: 20, width: 20 }}/>
-                        </View>
-                      )}
-                      {data.TimeIn && (
-                        <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
-                          <View style={{ flexDirection: 'column' }}>
-                            <Text>IN</Text>
-                            <Text>{data.TimeIn}</Text>
-                          </View>
-                          <View style={{ borderRadius: 100, backgroundColor: 'green', height: 20, width: 20 }}/>
-                        </View>
-                      )}
-                    </View>
-                  )}
-                />
+                    </>)}
               </ScrollView>            
             </View>
           </Animated.View>
