@@ -1,14 +1,19 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image, Alert } from 'react-native'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Ionicons } from "@expo/vector-icons"
+import { UserContext } from '../../hooks/useAuth';
 
 const Navbar = ({ handleActiveNavigation }) => {
+    const { logout } = useContext(UserContext)
     const [currentTab, setCurrentTab] = useState("Home");
 
+    const logoutHandler = () =>{
+      logout();
+    }
     const TabButton = (currentTab, setCurrentTab, title, icon) => {
         return (
           <TouchableOpacity onPress={() => {
-            title == "LogOut" ? Alert.alert("log out algo") : ( setCurrentTab(title), handleActiveNavigation(title));
+            title == "LogOut" ? logoutHandler(): ( setCurrentTab(title), handleActiveNavigation(title));
           }}>
             <View style={{flexDirection: "row",alignItems: 'center',paddingVertical: 8,backgroundColor: currentTab == title ? 'white' : 'transparent',paddingLeft: 13,paddingRight: 35,borderRadius: 8,marginTop: 15}}>
               <Ionicons name={icon} size={25} color={currentTab == title ? "#006738" : 'white'}/>

@@ -1,59 +1,75 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
+import * as SecureStore from 'expo-secure-store';
+import * as Crypto from 'expo-crypto';
+import Constants from 'expo-constants';
 
-const AuthContext = createContext({})
+export const UserContext = createContext();
 
-export const AuthProvider = ({children}) =>{
-    const [error, setError] = useState(null);
-    const [user, setUser] = useState(null);
-    const [loadingInitial, setLoadingInitial] = useState(true);
-    const [loading, setLoading] = useState(false);
+const UserContextProvider = (props) =>{
+  const [user, setUser] = useState(null);
 
-    useEffect(() => {
-      if (user != null){
-        setUser(user);
-        }else{
-          setUser(null);
-        }   
-        setLoadingInitial(false);
-    }, [])
-
-    const login = () =>{
-      const APIURL = "http://192.168.101.117/API/login.php";
-      const headers = {
-        'Accept':'application/json',
-        'Content-Type':'application.json'
+  useEffect(() =>{
+    SecureStore.getItemAsync('userToken')
+    .then((userToken) =>{
+      if (userToken){
+        setUser(JSON.parse(userToken));
       }
-      fetch(APIURL,{
-        method: 'POST',
-        headers: headers,
-      }).then((response) =>
-        response.json()
-      ).then((response) =>{
-        console.log(response);
-      }).then(()=>{
-        setLoading(true);
-        setLoadingInitial(true);
-      }).catch((error)=>console.log(error))
-    }
-    
-    const logout = () =>{
+    })
+    .catch((error) => console.log(error));
+  },[])
+  
+  const login = (ID, password) =>{
+    const APIURL = "http://192.168.1.13/API/Login.php";
+    const headers = {
+          'Accept':'application/json',
+          'Content-Type':'application.json'
+        }
+        let data = {
+          id: ID,
+          password: password,
+        }
+        fetch(APIURL,{
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify(data),
+        })
+    .then((response) => {
+      return response.json();
+    })
+    .then((response) =>{
+      if (response && response.User) {
+        const user = response.User;
+        const secretKey = Constants.manifest.extra.secretKey;
+        const userToken = Crypto.digestStringAsync(
+          Crypto.CryptoDigestAlgorithm.SHA256,
+          `${user.id}${user.name}${secretKey}`
+          );
+        SecureStore.setItemAsync('userToken', JSON.stringify(userToken))
+        .then(()=> setUser(user))
+        .catch((error) => console.log(error));
+      } else {
+        console.log("User not found in response");
+      }
+    })
+  .catch((error)=>console.log(error));
+  }
+  
+  const logout = () => {
+    SecureStore.deleteItemAsync('userToken')
+      .then(() => {
+        setUser(null);
+      })
+      .catch((error) => console.error('Error deleting user token:', error));
+  };
 
-    }
+  const isLoggedIn = () => {
+    return user !== null;
+  };
 
-    const memoedValue = useMemo(() =>({
-        user,
-        loading,
-        error,
-        login,
-        logout,
-    }),[user, loading, error])
   return (
-    <AuthContext.Provider value={memoedValue}>
-      {children}
-    </AuthContext.Provider>
-  )
-
+    <UserContext.Provider value={{ user, login, logout, isLoggedIn }}>
+      {props.children}
+    </UserContext.Provider>
+  );
 }
-export default function useAuth(){
-    return useContext (AuthContext);
-}
+export default UserContextProvider;

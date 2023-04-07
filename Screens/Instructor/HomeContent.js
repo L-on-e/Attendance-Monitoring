@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { FlatList, Animated, TouchableOpacity, Text, StyleSheet, Image, useWindowDimensions, View, Dimensions, Platform, ScrollView  } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -12,9 +12,11 @@ import {
   Poppins_800ExtraBold,
   Poppins_900Black,
 } from '@expo-google-fonts/poppins';
+import { UserContext } from '../../hooks/useAuth';
 
 
-const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOffset, setShowMenu }) => {
+const HomeContent = ({ showMenu, scaleValue, offsetValue, closeButtonOffset, setShowMenu }) => {
+    const { user } = useContext(UserContext);
     const navigation = useNavigation();
     const [recentLog, setRecentLog] = useState([]);
     const [allLog, setAllLog] = useState([]);
@@ -56,7 +58,7 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
       ReadRecent();
       return () => {
       }
-    }, [userID, dateToday, showAllHistory])
+    }, [user, dateToday, showAllHistory])
     
     const getDate = () => {
       const currentDate = new Date();
@@ -68,13 +70,13 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
     }
 
     const ReadRecent = () =>{
-      const APIURL = "http://192.168.111.95/API/ReadRecentTimeIn.php";
+      const APIURL = "http://192.168.1.13/API/ReadRecentTimeIn.php";
       const headers = {
         'Accept':'application/json',
         'Content-Type':'application.json'
       }
       let data = {
-          userID: userID,
+          userID: user.id,
           dateToday: showAllHistory == false ? dateToday : "",
         }
        fetch(APIURL,{
@@ -85,7 +87,6 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
       .then((response) =>
         response.json())
       .then((response) =>{
-        
         if((response.map(x=> x.Data)[0]) != 'No data'){
           // response.map(x=> x.Data)[0] == "No data" ? console.log("goods"): console.log("no")
           const formattedData = response.map((record) => {
