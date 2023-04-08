@@ -53,7 +53,13 @@ const HomeContent = ({ showMenu, scaleValue, offsetValue, closeButtonOffset, set
     };
     console.log(showAllHistory);
     
-    if (!isReady || !fontsLoaded) { return null;}
+    if (!isReady || !fontsLoaded) { 
+      return(
+        <Animated.View style={[styles.contentContainer,{ borderRadius: showMenu ? 15 : 0, transform: [ { scale: scaleValue }, { translateX: offsetValue } ] }]}>
+          <Animated.View style={{ transform: [{ translateY: closeButtonOffset }] }}>
+          </Animated.View>
+        </Animated.View>
+      ) }
     return (
         <Animated.View style={[styles.contentContainer,{ borderRadius: showMenu ? 15 : 0, transform: [{ scale: scaleValue }, { translateX: offsetValue }] }]}>
           <Animated.View style={{ transform: [{ translateY: closeButtonOffset }], flexGrow: 1 }}>
