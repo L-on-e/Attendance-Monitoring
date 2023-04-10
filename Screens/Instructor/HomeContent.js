@@ -3,6 +3,7 @@ import { FlatList, Animated, TouchableOpacity, Text, StyleSheet, Image, useWindo
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as SplashScreen from 'expo-splash-screen'
+import { Ionicons } from "@expo/vector-icons"
 import {
   useFonts,
   Poppins_400Regular,
@@ -68,7 +69,7 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
     }
 
     const ReadRecent = () =>{
-      const APIURL = "http://192.168.111.95/API/ReadRecentTimeIn.php";
+      const APIURL = "http://192.168.1.34/API/ReadRecentTimeIn.php";
       const headers = {
         'Accept':'application/json',
         'Content-Type':'application.json'
@@ -111,26 +112,39 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
                 Animated.timing(closeButtonOffset, { toValue: !showMenu ? -10 : 0, duration: 300, useNativeDriver: true }).start();
                 setShowMenu(!showMenu);
               }}>
-                <AntDesign name={showMenu ? 'menu-unfold' : 'menu-fold'} size={25}/>
+                <AntDesign name={showMenu ? 'menu-unfold' : 'menu-fold'} size={25} color={'#006738'}/>
                 <Text style={styles.titHome}>Home</Text> 
             </TouchableOpacity>
+
             <View style={styles.timeInOut}>
 
-              <View style={styles.tIOcontainer}>
-                <Text className="text-lg" style={styles.tioTEXT}>Click Here to </Text>
-                <TouchableOpacity onPress={()=>navigation.navigate('TimeIn')}>
-                    <Text style={styles.tioTEXTbtn} className="text-lg">Time In</Text>
-                </TouchableOpacity>   
-              </View>
-              
-              <View style={styles.tIOcontainer}>
-                <Text  className="text-lg" style={styles.tioTEXT}>Click Here to </Text>
-                <TouchableOpacity onPress={()=>navigation.navigate('TimeOut')}>
-                    <Text style={styles.tioTEXTbtn} className="text-lg ">Time Out</Text>
-                </TouchableOpacity>
+              <Text className="text-xl" style={styles.qrTit}>SCAN QR</Text>
+
+              <View style={styles.tioBtnCtn} className="flex-row">
+                <Image source={require('../Instructor/scan.png')}  style={styles.scanImg}/>
+
+                <View style={styles.tIOcontainer} className="flex-column">
+
+                  <TouchableOpacity onPress={()=>navigation.navigate('TimeIn')} className="w-full"> 
+                    <View className="flex-row border-0 bg-[#E6E6E6]" style={styles.btnctn}>
+                        <Text style={styles.tioTEXTbtn} className="text-lg">Time In</Text>
+                        <Ionicons name="time-outline"  color='white' size={30}  style={styles.btnIcon}/>
+                    </View>
+                  </TouchableOpacity>   
+
+
+                  <TouchableOpacity onPress={()=>navigation.navigate('TimeOut')} className="w-full"> 
+                    <View className="flex-row border-0 bg-[#E6E6E6]" style={styles.btnctn}>
+                        <Text style={styles.tioTEXTbtn} className="text-lg">Time Out</Text>
+                        <Ionicons name="log-out-outline"  color='white' size={30}  style={styles.btnIcon}/>
+                    </View>
+                  </TouchableOpacity>   
+                </View>
+
               </View>
 
             </View>
+
             <View style={{flexGrow: 0.1, flexDirection: 'row'}}>
               <TouchableOpacity onPress={()=>{setshowAllHistory(false),handlePress(0)}} style={{flexGrow: 1, justifyContent: 'center',
                 borderTopRightRadius: 10, borderTopLeftRadius:10,
@@ -237,7 +251,7 @@ export default HomeContent
   const styles = StyleSheet.create({
     contentContainer: {
       flexGrow: 1,
-      backgroundColor: 'white',
+      backgroundColor: '#fff',
       position: 'absolute',
       top: 0,
       bottom: 0,
@@ -247,6 +261,8 @@ export default HomeContent
       paddingVertical: 20,
     },
     containerShadow: {
+      borderBottomLeftRadius: 5,
+      borderBottomRightRadius: 5,
       padding: 15,
       backgroundColor: "white",
       marginHorizontal: 4,
@@ -277,26 +293,69 @@ export default HomeContent
 
     //TIME IN TIME OUT BUTTON
     timeInOut:{
-      flexGrow:0.1,
+      marginTop: 20,
+      marginBottom:10,
+      alignSelf: 'center',
+      borderRadius: 5,
+      backgroundColor: 'white',
+      width: '90%',
+      height: '10%',
+      flexGrow:0.2,
       alignItems:'center',
       justifyContent: 'center',
-      justifyContent:'space-evenly'
+      justifyContent:'space-evenly',
+      shadowColor: "#000",
+      shadowOffset:{
+          width:0,
+          height:1,
+      },
+      shadowOpacity:0.2,
+      shadowRadius:1.41,
+      elevation:2,
+    },
+
+    tioBtnCtn:{
+      marginTop: -10
+    },
+
+    qrTit:{
+      fontFamily:'Poppins_800ExtraBold',
+      color: '#006738',
+    },
+
+    scanImg:{
+      aspectRatio: 1,
+      resizeMode: 'contain',
+      maxWidth: "30%",
+      maxHeight: "80%",
+      alignSelf: 'center',
+    },
+
+    btnctn:{
+      borderRadius:5,
+      alignItems: 'center',
+      marginVertical: 10
     },
 
     tIOcontainer:{
-      flexDirection:'row',
-      alignItems:'center',
-      justifyContent:'center'
+      justifyContent:'center',
+      flexGrow: 0.1,
+      width:"50%", 
+      marginVertical: 10,
+      marginLeft:10
     },
-
-    tioTEXT:{
-      fontFamily:'Poppins_500Medium'
+    btnIcon:{
+      backgroundColor: '#006738',
+      borderTopRightRadius: 5,
+      borderBottomRightRadius: 5,
     },
-
     tioTEXTbtn:{
       fontFamily:'Poppins_600SemiBold',
-      color:'#006738'
+      color:'#006738',
+      flexGrow: 1,
+      marginLeft: 10
     },
+
     //
 
   })
