@@ -145,16 +145,16 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
 
             </View>
 
-            <View style={{flexGrow: 0.1, flexDirection: 'row', marginTop:15, marginHorizontal:3 }}>
+            <View style={{flexGrow: 0.1, flexDirection: 'row', marginTop:15, marginHorizontal:4}}>
               <TouchableOpacity onPress={()=>{setshowAllHistory(false),handlePress(0)}} style={{flexGrow: 1, justifyContent: 'center',
                 borderTopRightRadius: 10, borderTopLeftRadius:10,
-                backgroundColor: showAllHistory==true?'#fff':'#006738'}}>
-                  <Text style={{textAlign: 'center'}}>Recent History</Text>
+                backgroundColor: showAllHistory==true?'#fff':'#006738',minHeight:'5%', maxHeight:'100%'}}>
+                  <Text style={{textAlign: 'center', fontFamily:'Poppins_600SemiBold', color:showAllHistory==true?'#006738':'white'}}>Recent History</Text>
               </TouchableOpacity> 
               <TouchableOpacity onPress={()=>{setshowAllHistory(true),handlePress(1)}} style={{flexGrow: 1, justifyContent: 'center',
                 borderTopRightRadius: 10, borderTopLeftRadius:10,
-                backgroundColor: showAllHistory==true?'#006738':'#fff'}}>
-                  <Text style={{textAlign: 'center'}}>All History</Text>
+                backgroundColor: showAllHistory==true?'#006738':'#fff', minHeight:'5%', maxHeight:'100%' }}>
+                  <Text style={{textAlign: 'center' , fontFamily:'Poppins_600SemiBold', color:showAllHistory==true?'white':'#006738'}}>All History</Text>
               </TouchableOpacity> 
             </View>
             <View style={{flexGrow: 1, marginTop: -15}}>
@@ -176,8 +176,8 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
                               {data.TimeOut && (
                                 <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
                                   <View style={{ flexDirection: 'column' }}>
-                                    <Text>OUT</Text>
-                                    <Text>{data.TimeOut}</Text>
+                                    <Text style={{fontFamily:'Poppins_500Medium', color:'white'  }} >OUT</Text>
+                                    <Text style={{fontFamily:'Poppins_500Medium', color:'white'  }}>{data.TimeOut}</Text>
                                   </View>
                                   <View style={{ borderRadius: 100, backgroundColor: 'red', height: 20, width: 20 }}/>
                                 </View>
@@ -185,8 +185,8 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
                               {data.TimeIn && (
                                 <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
                                   <View style={{ flexDirection: 'column' }}>
-                                    <Text>IN</Text>
-                                    <Text>{data.TimeIn}</Text>
+                                    <Text style={{ flexDirection: 'column', fontFamily:'Poppins_500Medium', color:'white' }}>IN</Text>
+                                    <Text style={{fontFamily:'Poppins_500Medium', color:'white'  }}>{data.TimeIn}</Text>
                                   </View>
                                   <View style={{ borderRadius: 100, backgroundColor: 'green', height: 20, width: 20 }}/>
                                 </View>
@@ -198,7 +198,7 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
                     :(<>
                       <View style={styles.containerShadow}>
                         <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
-                          <Text>No Data</Text>
+                          <Text style={{fontFamily:'Poppins_500Medium', color:'white'  }}>No Data</Text>
                         </View>
                       </View>
                     </>)}
@@ -211,10 +211,10 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
                         renderItem={({ item: data }) => (
                           <View>
                             {data.TimeOut && (
-                              <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
+                              <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', borderBottomColor: 'white', borderBottomWidth:1.5, }}>
                                 <View style={{ flexDirection: 'column' }}>
-                                  <Text>Out</Text>
-                                  <Text>{data.TimeOut}</Text>
+                                  <Text  style={{fontFamily:'Poppins_500Medium' , color:'white' }}>Out</Text>
+                                  <Text  style={{fontFamily:'Poppins_500Medium', color:'white'  }}>{data.TimeOut}</Text>
                                 </View>
                                 <View style={{ borderRadius: 100, backgroundColor: 'red', height: 20, width: 20 }}/>
                               </View>
@@ -222,10 +222,10 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
                             {data.TimeIn && (
                               <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
                                 <View style={{ flexDirection: 'column' }}>
-                                  <Text>IN</Text>
-                                  <Text>{data.TimeIn}</Text>
+                                  <Text  style={{fontFamily:'Poppins_500Medium' , color:'white' }}>IN</Text>
+                                  <Text  style={{fontFamily:'Poppins_500Medium', color:'white' }}>{data.TimeIn}</Text>
                                 </View>
-                                <View style={{ borderRadius: 100, backgroundColor: 'green', height: 20, width: 20 }}/>
+                                <View style={{ borderRadius: 100, backgroundColor: 'white', height: 20, width: 20 }}/>
                               </View>
                             )}
                           </View>
@@ -235,7 +235,7 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
                     :(<>
                     <View style={styles.containerShadow}>
                       <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
-                        <Text>No Data</Text>
+                        <Text style={{fontFamily:'Poppins_500Medium', color:'white'  }}>No Data</Text>
                       </View>
                     </View>
                     </>)}
@@ -261,10 +261,11 @@ export default HomeContent
       paddingVertical: 20,
     },
     containerShadow: {
+      position:'relative',
       borderBottomLeftRadius: 5,
       borderBottomRightRadius: 5,
       padding: 15,
-      backgroundColor: "white",
+      backgroundColor: "#006738",
       marginHorizontal: 4,
       marginVertical: 15,
       shadowColor: "#000",
@@ -280,6 +281,10 @@ export default HomeContent
   carouselContentContainer: {
     flexGrow: 1,
     overflow: 'hidden',
+  },
+
+  underline:{
+    backgroundColor: 'red'
   },
     
     //HOME TITLE
@@ -299,7 +304,8 @@ export default HomeContent
       borderRadius: 5,
       backgroundColor: 'white',
       width: '90%',
-      height: '10%',
+      maxHeight: '20%',
+      minHeight:'20%',
       flexGrow:0.4,
       alignItems:'center',
       justifyContent: 'center',
@@ -340,7 +346,7 @@ export default HomeContent
     tIOcontainer:{
       justifyContent:'center',
       flexGrow: 0.1,
-      width:"50%", 
+      width:"40%", 
       marginVertical: 10,
       marginLeft:10
     },
