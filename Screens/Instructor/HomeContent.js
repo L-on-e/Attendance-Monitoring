@@ -145,7 +145,7 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
 
             </View>
 
-            <View style={{flexGrow: 0.1, flexDirection: 'row'}}>
+            <View style={{flexGrow: 0.1, flexDirection: 'row', marginTop:15, marginHorizontal:3 }}>
               <TouchableOpacity onPress={()=>{setshowAllHistory(false),handlePress(0)}} style={{flexGrow: 1, justifyContent: 'center',
                 borderTopRightRadius: 10, borderTopLeftRadius:10,
                 backgroundColor: showAllHistory==true?'#fff':'#006738'}}>
@@ -157,7 +157,7 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
                   <Text style={{textAlign: 'center'}}>All History</Text>
               </TouchableOpacity> 
             </View>
-            <View style={{flexGrow: 1}}>
+            <View style={{flexGrow: 1, marginTop: -15}}>
               <ScrollView 
                 ref={scrollViewRef}
                 horizontal
@@ -300,7 +300,7 @@ export default HomeContent
       backgroundColor: 'white',
       width: '90%',
       height: '10%',
-      flexGrow:0.2,
+      flexGrow:0.4,
       alignItems:'center',
       justifyContent: 'center',
       justifyContent:'space-evenly',
