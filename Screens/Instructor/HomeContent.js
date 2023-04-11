@@ -130,7 +130,7 @@ const HomeContent = ({ showMenu, scaleValue, offsetValue, closeButtonOffset, set
                   setshowAllHistory(currentPage === 1);
                 }}>
                   <RecentHistory />
-                  <AllHistory />
+                  <AllHistory/>
               </ScrollView>            
             </View>
           </Animated.View>

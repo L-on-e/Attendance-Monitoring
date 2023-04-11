@@ -57,7 +57,7 @@ const AllHistory = () => {
 
   const readAllHistory = async () => {
     try {
-      const API_URL = "http://192.168.1.13/API/ReadAllHistory.php";
+      const API_URL = "http://192.168.111.95/API/ReadAllHistory.php";
       const headers = {
         Accept: "application/json",
         "Content-Type": "application/json",
