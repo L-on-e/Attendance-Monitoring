@@ -21,7 +21,7 @@ import {
 import { UserContext } from "../../hooks/useAuth";
 import { ActivityIndicator } from "react-native";
 
-const RecentHistory = ({historyBG}) => {
+const RecentHistory = ({ historyBG }) => {
   const { user } = useContext(UserContext);
   const [recentLog, setRecentLog] = useState([]);
   const [dateToday, setDateToday] = useState([]);
@@ -61,11 +61,11 @@ const RecentHistory = ({historyBG}) => {
         setLoading(false);
       } catch (error) {
         console.log(error);
-        Alert.alert("An error occurred while fetching data from the server.");
+        // Alert.alert("An error occurred while fetching data from the server.");
       }
     };
     fetchData();
-  }, [user]);
+  }, [user, loading]);
 
   const getDate = async () => {
     const currentDate = new Date();
@@ -79,7 +79,7 @@ const RecentHistory = ({historyBG}) => {
 
   const readRecent = async (date) => {
     try {
-      const API_URL = "http://192.168.111.95/API/ReadRecentTimeIn.php";
+      const API_URL = "http://192.168.1.12/API/ReadRecentTimeIn.php";
       const headers = {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -94,7 +94,7 @@ const RecentHistory = ({historyBG}) => {
         body: JSON.stringify(data),
       });
       const responseData = await response.json();
-      if (responseData.length && responseData[0].Data !== "No data") {
+      if (responseData?.length && responseData[0]?.Data !== "No data") {
         const formattedData = responseData.map((record) => ({
           ID: record.ID,
           Room_Number: record.Room_Number,
@@ -109,7 +109,7 @@ const RecentHistory = ({historyBG}) => {
       throw error;
     }
   };
-  
+
   if (!isReady || !fontsLoaded) {
     return null;
   }
@@ -118,13 +118,29 @@ const RecentHistory = ({historyBG}) => {
       {recentLog.length != 0 && !loading ? (
         <>
           <FlatList
-            style={[styles.containerShadow,{backgroundColor: historyBG==true?'#fff':'#006738'}]}
+            refreshing={loading}
+            onRefresh={() => {
+              setLoading(true);
+            }}
+            style={[
+              styles.containerShadow,
+              { backgroundColor: historyBG == true ? "#fff" : "#006738" },
+            ]}
             data={recentLog}
             keyExtractor={(item) => item.ID}
             renderItem={({ item: data }) => (
               <View>
-                <Text style={{paddingLeft: 30, color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_600SemiBold', fontSize: 18}}>Room Number {data.Room_Number}</Text>
-                {data.TimeOut != '0000-00-00 00:00:00' ? (
+                <Text
+                  style={{
+                    paddingLeft: 30,
+                    color: historyBG == true ? "#006738" : "#fff",
+                    fontFamily: "Poppins_600SemiBold",
+                    fontSize: 18,
+                  }}
+                >
+                  Room Number {data.Room_Number}
+                </Text>
+                {data.TimeOut != "0000-00-00 00:00:00" ? (
                   <View
                     style={{
                       padding: 5,
@@ -133,9 +149,36 @@ const RecentHistory = ({historyBG}) => {
                       justifyContent: "space-around",
                     }}
                   >
-                    <View style={{ flexDirection: "column", alignContent: 'center'  }}>
-                      <Text style={[styles.cntText, {color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>OUT</Text>
-                      <Text style={[styles.cntText, {color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>{data.TimeOut}</Text>
+                    <View
+                      style={{
+                        flexDirection: "column",
+                        alignContent: "center",
+                      }}
+                    >
+                      <Text
+                        style={[
+                          styles.cntText,
+                          {
+                            color: historyBG == true ? "#006738" : "#fff",
+                            fontFamily: "Poppins_500Medium",
+                            fontSize: 18,
+                          },
+                        ]}
+                      >
+                        OUT
+                      </Text>
+                      <Text
+                        style={[
+                          styles.cntText,
+                          {
+                            color: historyBG == true ? "#006738" : "#fff",
+                            fontFamily: "Poppins_500Medium",
+                            fontSize: 18,
+                          },
+                        ]}
+                      >
+                        {data.TimeOut}
+                      </Text>
                     </View>
                     <View
                       style={{
@@ -146,7 +189,9 @@ const RecentHistory = ({historyBG}) => {
                       }}
                     />
                   </View>
-                ):(<></>)}
+                ) : (
+                  <></>
+                )}
                 {data.TimeIn && (
                   <View
                     style={{
@@ -156,9 +201,36 @@ const RecentHistory = ({historyBG}) => {
                       justifyContent: "space-around",
                     }}
                   >
-                    <View style={{ flexDirection: "column", alignContent: 'center' }}>
-                      <Text style={[styles.cntText, {color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>IN</Text>
-                      <Text style={[styles.cntText, {color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>{data.TimeIn}</Text>
+                    <View
+                      style={{
+                        flexDirection: "column",
+                        alignContent: "center",
+                      }}
+                    >
+                      <Text
+                        style={[
+                          styles.cntText,
+                          {
+                            color: historyBG == true ? "#006738" : "#fff",
+                            fontFamily: "Poppins_500Medium",
+                            fontSize: 18,
+                          },
+                        ]}
+                      >
+                        IN
+                      </Text>
+                      <Text
+                        style={[
+                          styles.cntText,
+                          {
+                            color: historyBG == true ? "#006738" : "#fff",
+                            fontFamily: "Poppins_500Medium",
+                            fontSize: 18,
+                          },
+                        ]}
+                      >
+                        {data.TimeIn}
+                      </Text>
                     </View>
                     <View
                       style={{
@@ -176,7 +248,12 @@ const RecentHistory = ({historyBG}) => {
         </>
       ) : (
         <>
-          <View style={[styles.containerShadow,{backgroundColor: historyBG==true?'#fff':'#006738'}]}>
+          <View
+            style={[
+              styles.containerShadow,
+              { backgroundColor: historyBG == true ? "#fff" : "#006738" },
+            ]}
+          >
             <View
               style={{
                 padding: 10,
@@ -185,7 +262,18 @@ const RecentHistory = ({historyBG}) => {
                 justifyContent: "space-around",
               }}
             >
-              <Text style={[styles.cntText, {color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_600SemiBold', fontSize: 18}]}>No Data</Text>
+              <Text
+                style={[
+                  styles.cntText,
+                  {
+                    color: historyBG == true ? "#006738" : "#fff",
+                    fontFamily: "Poppins_600SemiBold",
+                    fontSize: 18,
+                  },
+                ]}
+              >
+                No Data
+              </Text>
             </View>
           </View>
         </>
@@ -207,7 +295,6 @@ const styles = StyleSheet.create({
     shadowOffset: {
       width: 0,
       height: 1,
-    
     },
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
@@ -222,12 +309,11 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
 
-  
-  ctnDvd:{
+  ctnDvd: {
     borderBottomWidth: 3,
-    borderColor: 'white',
-    width: '75%',
-    alignSelf: 'center'
+    borderColor: "white",
+    width: "75%",
+    alignSelf: "center",
   },
 
   //HOME TITLE

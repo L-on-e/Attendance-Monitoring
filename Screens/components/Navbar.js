@@ -6,6 +6,7 @@ import {
   Image,
   Alert,
 } from "react-native";
+import { Octicons } from '@expo/vector-icons'; 
 import React, { useContext, useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { UserContext } from "../../hooks/useAuth";
@@ -14,7 +15,8 @@ import * as ImagePicker from "expo-image-picker";
 const Navbar = ({ handleActiveNavigation }) => {
   const { user, logout } = useContext(UserContext);
   const [currentTab, setCurrentTab] = useState("Home");
-  const [profilePhoto, setProfilePhoto] = useState(user.profilePhoto);
+  const tempo = "https://static.vecteezy.com/system/resources/previews/010/056/184/original/people-icon-sign-symbol-design-free-png.png";
+  const [profilePhoto, setProfilePhoto] = useState(user.profilePhoto == "" ? tempo:user.profilePhoto);
 
   const logoutHandler = () => {
     logout();
@@ -48,7 +50,7 @@ const Navbar = ({ handleActiveNavigation }) => {
 
   const uploadImage = async (base64String) => {
     try {
-      const API_URL = "http://192.168.111.95/API/uploadImage.php";
+      const API_URL = "http://192.168.1.12/API/uploadImage.php";
       const headers = {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -75,13 +77,8 @@ const Navbar = ({ handleActiveNavigation }) => {
     }
   };
 
-  // useEffect(() => {
-  //   fetchNewProfile();
-  // }, [profilePhoto])
-  
-
   const fetchNewProfile = async () => {
-    const APIURL = "http://192.168.111.95/API/fetchProfilePhoto.php";
+    const APIURL = "http://192.168.1.12/API/fetchProfilePhoto.php";
     const headers = {
       Accept: "application/json",
       "Content-Type": "application.json",
@@ -172,7 +169,7 @@ const Navbar = ({ handleActiveNavigation }) => {
       </TouchableOpacity>
       <View style={{ flexGrow: 1, marginTop: 50 }}>
         {TabButton(currentTab, setCurrentTab, "Home", "home-outline")}
-        {TabButton(currentTab, setCurrentTab, "Subjects", "book-outline")}
+        {/* {TabButton(currentTab, setCurrentTab, "Subjects", "book-outline")} */}
         {TabButton(currentTab, setCurrentTab, "Settings", "settings-outline")}
       </View>
       <View>

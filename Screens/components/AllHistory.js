@@ -20,11 +20,12 @@ import {
 } from "@expo-google-fonts/poppins";
 import { UserContext } from "../../hooks/useAuth";
 
-const AllHistory = ({historyBG}) => {
+const AllHistory = ({ historyBG }) => {
   const { user } = useContext(UserContext);
   const [allLog, setAllLog] = useState([]);
 
   const [isReady, setIsReady] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function prepare() {
@@ -52,12 +53,20 @@ const AllHistory = ({historyBG}) => {
   });
 
   useEffect(() => {
-    readAllHistory();
-  }, [user]);
+    const fetchData = async () => {
+      try {
+        await readAllHistory();
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [user, loading]);
 
   const readAllHistory = async () => {
     try {
-      const API_URL = "http://192.168.111.95/API/ReadAllHistory.php";
+      const API_URL = "http://192.168.1.12/API/ReadAllHistory.php";
       const headers = {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -84,7 +93,7 @@ const AllHistory = ({historyBG}) => {
       }
     } catch (error) {
       console.log(error);
-      Alert.alert("An error occurred while fetching data from the server.");
+      // Alert.alert("An error occurred while fetching data from the server.");
     }
   };
 
@@ -96,14 +105,30 @@ const AllHistory = ({historyBG}) => {
       {allLog.length != 0 ? (
         <>
           <FlatList
-            style={[styles.containerShadow,{backgroundColor: historyBG==true?'#006738':'#fff'}]}
+            refreshing={loading}
+            onRefresh={() => {
+              setLoading(true);
+            }}
+            style={[
+              styles.containerShadow,
+              { backgroundColor: historyBG == true ? "#006738" : "#fff" },
+            ]}
             data={allLog}
             keyExtractor={(item) => item.ID}
             renderItem={({ item: data }) => (
               <View>
-                <Text style={{textAlign:"center",color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_600SemiBold', fontSize: 18}}>Room Number {data.Room_Number}</Text>
+                <Text
+                  style={{
+                    textAlign: "center",
+                    color: historyBG == true ? "#fff" : "#006738",
+                    fontFamily: "Poppins_600SemiBold",
+                    fontSize: 18,
+                  }}
+                >
+                  Room Number {data.Room_Number}
+                </Text>
                 <View style={styles.ctnDvd}></View>
-                {data.TimeOut != '0000-00-00 00:00:00' ? (
+                {data.TimeOut != "0000-00-00 00:00:00" ? (
                   <View
                     style={{
                       padding: 5,
@@ -113,8 +138,30 @@ const AllHistory = ({historyBG}) => {
                     }}
                   >
                     <View style={{ flexDirection: "column" }}>
-                      <Text style={[styles.cntText, {color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>Out</Text>
-                      <Text style={[styles.cntText, {color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>{data.TimeOut}</Text>
+                      <Text
+                        style={[
+                          styles.cntText,
+                          {
+                            color: historyBG == true ? "#fff" : "#006738",
+                            fontFamily: "Poppins_500Medium",
+                            fontSize: 18,
+                          },
+                        ]}
+                      >
+                        Out
+                      </Text>
+                      <Text
+                        style={[
+                          styles.cntText,
+                          {
+                            color: historyBG == true ? "#fff" : "#006738",
+                            fontFamily: "Poppins_500Medium",
+                            fontSize: 18,
+                          },
+                        ]}
+                      >
+                        {data.TimeOut}
+                      </Text>
                     </View>
                     <View
                       style={{
@@ -125,7 +172,9 @@ const AllHistory = ({historyBG}) => {
                       }}
                     />
                   </View>
-                ):(<></>)}
+                ) : (
+                  <></>
+                )}
                 {data.TimeIn && (
                   <View
                     style={{
@@ -136,8 +185,30 @@ const AllHistory = ({historyBG}) => {
                     }}
                   >
                     <View style={{ flexDirection: "column" }}>
-                      <Text style={[styles.cntText, {color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_500Medium', fontSize: 18}]} >IN</Text>
-                      <Text style={[styles.cntText, {color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>{data.TimeIn}</Text>
+                      <Text
+                        style={[
+                          styles.cntText,
+                          {
+                            color: historyBG == true ? "#fff" : "#006738",
+                            fontFamily: "Poppins_500Medium",
+                            fontSize: 18,
+                          },
+                        ]}
+                      >
+                        IN
+                      </Text>
+                      <Text
+                        style={[
+                          styles.cntText,
+                          {
+                            color: historyBG == true ? "#fff" : "#006738",
+                            fontFamily: "Poppins_500Medium",
+                            fontSize: 18,
+                          },
+                        ]}
+                      >
+                        {data.TimeIn}
+                      </Text>
                     </View>
                     <View
                       style={{
@@ -149,15 +220,18 @@ const AllHistory = ({historyBG}) => {
                     />
                   </View>
                 )}
-
               </View>
-              
             )}
           />
         </>
       ) : (
         <>
-          <View style={[styles.containerShadow,{backgroundColor: historyBG==true?'#fff' : '#006738'}]}>
+          <View
+            style={[
+              styles.containerShadow,
+              { backgroundColor: historyBG == true ? "#006738" : "#fff" },
+            ]}
+          >
             <View
               style={{
                 padding: 10,
@@ -166,7 +240,18 @@ const AllHistory = ({historyBG}) => {
                 justifyContent: "space-around",
               }}
             >
-              <Text style={[styles.cntText, {color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>No Data</Text>
+              <Text
+                style={[
+                  styles.cntText,
+                  {
+                    color: historyBG == true ? "#fff" : "#006738",
+                    fontFamily: "Poppins_500Medium",
+                    fontSize: 18,
+                  },
+                ]}
+              >
+                No Data
+              </Text>
             </View>
           </View>
         </>
@@ -202,11 +287,11 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
 
-  ctnDvd:{
+  ctnDvd: {
     borderBottomWidth: 2,
-    borderColor: 'white',
-    width: '60%',
-    alignSelf: 'center'
+    borderColor: "white",
+    width: "60%",
+    alignSelf: "center",
   },
 
   //HOME TITLE

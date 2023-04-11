@@ -14,7 +14,7 @@ const StackNavigator = () => {
   const { user } = useContext(UserContext);
   return (
       <Stack.Navigator>
-        { user && user.id ? 
+        { user && (user.isVerified == 1) ? 
           (<>
             <Stack.Group>
               <Stack.Screen name="Home" component={Home} options={{headerShown: false}}  />
