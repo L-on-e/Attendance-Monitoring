@@ -74,6 +74,7 @@ const AllHistory = ({historyBG}) => {
       if (responseData[0]?.Data !== "No data") {
         const formattedData = responseData.map((record) => ({
           ID: record.ID,
+          Room_Number: record.Room_Number,
           TimeIn: `${record.TimeIn_Date} ${record.TimeIn_Time}`,
           TimeOut: `${record.TimeOut_Date} ${record.TimeOut_Time}`,
         }));
@@ -100,6 +101,8 @@ const AllHistory = ({historyBG}) => {
             keyExtractor={(item) => item.ID}
             renderItem={({ item: data }) => (
               <View>
+                <Text style={{textAlign:"center",color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_600SemiBold', fontSize: 18}}>Room Number {data.Room_Number}</Text>
+                <View style={styles.ctnDvd}></View>
                 {data.TimeOut != '0000-00-00 00:00:00' ? (
                   <View
                     style={{
@@ -110,8 +113,8 @@ const AllHistory = ({historyBG}) => {
                     }}
                   >
                     <View style={{ flexDirection: "column" }}>
-                      <Text style={[styles.cntText, {color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_600SemiBold', fontSize: 18}]}>Out</Text>
-                      <Text style={[styles.cntText, {color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_600SemiBold', fontSize: 18}]}>{data.TimeOut}</Text>
+                      <Text style={[styles.cntText, {color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>Out</Text>
+                      <Text style={[styles.cntText, {color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>{data.TimeOut}</Text>
                     </View>
                     <View
                       style={{
@@ -133,8 +136,8 @@ const AllHistory = ({historyBG}) => {
                     }}
                   >
                     <View style={{ flexDirection: "column" }}>
-                      <Text style={[styles.cntText, {color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_600SemiBold', fontSize: 18}]} >IN</Text>
-                      <Text style={[styles.cntText, {color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_600SemiBold', fontSize: 18}]}>{data.TimeIn}</Text>
+                      <Text style={[styles.cntText, {color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_500Medium', fontSize: 18}]} >IN</Text>
+                      <Text style={[styles.cntText, {color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>{data.TimeIn}</Text>
                     </View>
                     <View
                       style={{
@@ -147,7 +150,6 @@ const AllHistory = ({historyBG}) => {
                   </View>
                 )}
 
-                <View style={styles.ctnDvd}></View>
               </View>
               
             )}
@@ -164,7 +166,7 @@ const AllHistory = ({historyBG}) => {
                 justifyContent: "space-around",
               }}
             >
-              <Text style={[styles.cntText, {color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_600SemiBold', fontSize: 18}]}>No Data</Text>
+              <Text style={[styles.cntText, {color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>No Data</Text>
             </View>
           </View>
         </>
@@ -177,7 +179,7 @@ export default AllHistory;
 
 const styles = StyleSheet.create({
   containerShadow: {
-    flexGrow: 1,
+    flexGrow: 0.8,
     padding: 15,
     backgroundColor: "white",
     marginHorizontal: 4,
@@ -201,9 +203,9 @@ const styles = StyleSheet.create({
   },
 
   ctnDvd:{
-    borderBottomWidth: 3,
+    borderBottomWidth: 2,
     borderColor: 'white',
-    width: '75%',
+    width: '60%',
     alignSelf: 'center'
   },
 
