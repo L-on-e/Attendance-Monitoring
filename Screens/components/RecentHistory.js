@@ -123,7 +123,8 @@ const RecentHistory = ({historyBG}) => {
             keyExtractor={(item) => item.ID}
             renderItem={({ item: data }) => (
               <View>
-                <Text style={{paddingLeft: 30, color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_600SemiBold', fontSize: 18}}>Room Number {data.Room_Number}</Text>
+                <View style={{marginVertical:10,backgroundColor: 'white', width: '70%', alignSelf:'center', borderRadius: 5}}>
+                <Text style={{textAlign:"center",color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_600SemiBold', fontSize: 20}}>Room Number {data.Room_Number}</Text>
                 {data.TimeOut != '0000-00-00 00:00:00' ? (
                   <View
                     style={{
@@ -134,8 +135,8 @@ const RecentHistory = ({historyBG}) => {
                     }}
                   >
                     <View style={{ flexDirection: "column", alignContent: 'center'  }}>
-                      <Text style={[styles.cntText, {color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>OUT</Text>
-                      <Text style={[styles.cntText, {color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>{data.TimeOut}</Text>
+                      <Text style={[styles.cntText, {color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>OUT</Text>
+                      <Text style={[styles.cntText, {color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>{data.TimeOut}</Text>
                     </View>
                     <View
                       style={{
@@ -157,13 +158,13 @@ const RecentHistory = ({historyBG}) => {
                     }}
                   >
                     <View style={{ flexDirection: "column", alignContent: 'center' }}>
-                      <Text style={[styles.cntText, {color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>IN</Text>
-                      <Text style={[styles.cntText, {color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>{data.TimeIn}</Text>
+                      <Text style={[styles.cntText, {color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>IN</Text>
+                      <Text style={[styles.cntText, {color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>{data.TimeIn}</Text>
                     </View>
                     <View
                       style={{
                         borderRadius: 100,
-                        backgroundColor: "white",
+                        backgroundColor: "green",
                         height: 20,
                         width: 20,
                       }}
@@ -171,7 +172,9 @@ const RecentHistory = ({historyBG}) => {
                   </View>
                 )}
               </View>
+              </View>
             )}
+            
           />
         </>
       ) : (
