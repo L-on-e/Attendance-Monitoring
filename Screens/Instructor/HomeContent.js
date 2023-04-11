@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { FlatList, Animated, TouchableOpacity, Text, StyleSheet, Image, useWindowDimensions, View, Dimensions, Platform, ScrollView  } from 'react-native';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { FlatList, Animated, TouchableOpacity, Text, StyleSheet, Image, useWindowDimensions, View, Dimensions, Platform, ScrollView, Alert  } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as SplashScreen from 'expo-splash-screen'
@@ -12,13 +12,14 @@ import {
   Poppins_800ExtraBold,
   Poppins_900Black,
 } from '@expo-google-fonts/poppins';
+import { UserContext } from '../../hooks/useAuth';
+import RecentHistory from '../components/RecentHistory';
+import AllHistory from '../components/AllHistory';
 
 
-const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOffset, setShowMenu }) => {
+const HomeContent = ({ showMenu, scaleValue, offsetValue, closeButtonOffset, setShowMenu }) => {
+    const { user } = useContext(UserContext);
     const navigation = useNavigation();
-    const [recentLog, setRecentLog] = useState([]);
-    const [allLog, setAllLog] = useState([]);
-    const [dateToday, setDateToday] = useState([]);
     const [showAllHistory, setshowAllHistory] = useState(false);
     const scrollViewRef = useRef();
 
@@ -43,57 +44,22 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
       Poppins_900Black,
     });
 
-    const handlePress = (pageIndex) => {
+    const handlePress = (pageIndex, isShowAllHistory) => {
+      setshowAllHistory(isShowAllHistory);
       scrollViewRef.current.scrollTo({
         x: pageIndex * Dimensions.get('window').width,
         animated: true,
       });
     };
-
-    useEffect(() => {
-      getDate();
-      ReadRecent();
-      return () => {
-      }
-    }, [userID, dateToday, showAllHistory])
+    console.log(showAllHistory);
     
-    const getDate = () => {
-      const currentDate = new Date();
-      const year = currentDate.getFullYear();
-      const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-      const day = String(currentDate.getDate()).padStart(2, '0');
-      const formattedDate = `${year}-${month}-${day}`;
-      setDateToday(formattedDate);
-    }
-
-    const ReadRecent = () =>{
-      const APIURL = "http://192.168.1.2/API/ReadRecentTimeIn.php";
-      const headers = {
-        'Accept':'application/json',
-        'Content-Type':'application.json'
-      }
-      let data = {
-          userID: userID ,
-          dateToday: showAllHistory == false ? dateToday : "",
-        }
-       fetch(APIURL,{
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(data),
-      })
-      .then((response) =>
-        response.json())
-      .then((response) =>{
-        const formattedData = response.map((record) => {
-          const timeIn = `${record.TimeIn_Date} ${record.TimeIn_Time}`;
-          const timeOut = `${record.TimeOut_Date} ${record.TimeOut_Time}`;
-          return { ID: record.ID, TimeIn: timeIn, TimeOut: timeOut };
-        });
-        showAllHistory == false ?( setRecentLog(formattedData), setAllLog([]) ):( setAllLog(formattedData), setRecentLog([]));
-      })
-      .catch((error)=>console.log(error));
-    }
-    if (!isReady || !fontsLoaded) { return null;}
+    if (!isReady || !fontsLoaded) { 
+      return(
+        <Animated.View style={[styles.contentContainer,{ borderRadius: showMenu ? 15 : 0, transform: [ { scale: scaleValue }, { translateX: offsetValue } ] }]}>
+          <Animated.View style={{ transform: [{ translateY: closeButtonOffset }] }}>
+          </Animated.View>
+        </Animated.View>
+      ) }
     return (
         <Animated.View style={[styles.contentContainer,{ borderRadius: showMenu ? 15 : 0, transform: [{ scale: scaleValue }, { translateX: offsetValue }] }]}>
           <Animated.View style={{ transform: [{ translateY: closeButtonOffset }], flexGrow: 1 }}>
@@ -125,15 +91,15 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
 
             </View>
             <View style={{flexGrow: 0.1, flexDirection: 'row'}}>
-              <TouchableOpacity onPress={()=>{setshowAllHistory(false),handlePress(0)}} style={{flexGrow: 1, justifyContent: 'center',
+              <TouchableOpacity onPress={()=>{handlePress(0, false)}} style={{flexGrow: 1, justifyContent: 'center',
                 borderTopRightRadius: 10, borderTopLeftRadius:10,
-                backgroundColor: showAllHistory==true?'#fff':'#006738'}}>
-                  <Text style={{textAlign: 'center'}}>Recent History</Text>
+                backgroundColor: !showAllHistory ? '#006738' : '#fff'}}>
+                <Text style={{textAlign: 'center'}}>Recent History</Text>
               </TouchableOpacity> 
-              <TouchableOpacity onPress={()=>{setshowAllHistory(true),handlePress(1)}} style={{flexGrow: 1, justifyContent: 'center',
+              <TouchableOpacity onPress={()=>{handlePress(1,true)}} style={{flexGrow: 1, justifyContent: 'center',
                 borderTopRightRadius: 10, borderTopLeftRadius:10,
-                backgroundColor: showAllHistory==true?'#006738':'#fff'}}>
-                  <Text style={{textAlign: 'center'}}>All History</Text>
+                backgroundColor: showAllHistory ? '#006738' : '#fff'}}>
+                <Text style={{textAlign: 'center'}}>All History</Text>
               </TouchableOpacity> 
             </View>
             <View style={{flexGrow: 1}}>
@@ -142,61 +108,13 @@ const HomeContent = ({ userID, showMenu, scaleValue, offsetValue, closeButtonOff
                 horizontal
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.carouselContentContainer}>
-                <FlatList 
-                  style={styles.containerShadow}
-                  data={recentLog}
-                  keyExtractor={item => item.ID}
-                  renderItem={({ item: data }) => (
-                    <View>
-                      {data.TimeOut && (
-                        <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
-                          <View style={{ flexDirection: 'column' }}>
-                            <Text>OUT</Text>
-                            <Text>{data.TimeOut}</Text>
-                          </View>
-                          <View style={{ borderRadius: 100, backgroundColor: 'red', height: 20, width: 20 }}/>
-                        </View>
-                      )}
-                      {data.TimeIn && (
-                        <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
-                          <View style={{ flexDirection: 'column' }}>
-                            <Text>IN</Text>
-                            <Text>{data.TimeIn}</Text>
-                          </View>
-                          <View style={{ borderRadius: 100, backgroundColor: 'green', height: 20, width: 20 }}/>
-                        </View>
-                      )}
-                    </View>
-                  )}
-                />
-                <FlatList 
-                  style={styles.containerShadow}
-                  data={allLog}
-                  keyExtractor={item => item.ID}
-                  renderItem={({ item: data }) => (
-                    <View>
-                      {data.TimeOut && (
-                        <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
-                          <View style={{ flexDirection: 'column' }}>
-                            <Text>Out</Text>
-                            <Text>{data.TimeOut}</Text>
-                          </View>
-                          <View style={{ borderRadius: 100, backgroundColor: 'red', height: 20, width: 20 }}/>
-                        </View>
-                      )}
-                      {data.TimeIn && (
-                        <View style={{ padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
-                          <View style={{ flexDirection: 'column' }}>
-                            <Text>IN</Text>
-                            <Text>{data.TimeIn}</Text>
-                          </View>
-                          <View style={{ borderRadius: 100, backgroundColor: 'green', height: 20, width: 20 }}/>
-                        </View>
-                      )}
-                    </View>
-                  )}
-                />
+                onMomentumScrollEnd={(event) => {
+                  const x = event.nativeEvent.contentOffset.x;
+                  const currentPage = x >= Dimensions.get('window').width / 2 ? 1 : 0;
+                  setshowAllHistory(currentPage === 1);
+                }}>
+                  <RecentHistory />
+                  <AllHistory />
               </ScrollView>            
             </View>
           </Animated.View>
@@ -218,21 +136,6 @@ export default HomeContent
       paddingHorizontal: 15,
       paddingVertical: 20,
     },
-    containerShadow: {
-      padding: 15,
-      backgroundColor: "white",
-      marginHorizontal: 4,
-      marginVertical: 15,
-      shadowColor: "#000",
-      shadowOffset:{
-          width:0,
-          height:1,
-      },
-      shadowOpacity:0.2,
-      shadowRadius:1.41,
-      elevation:2,
-      width: Dimensions.get('window').width - 40,
-  },
   carouselContentContainer: {
     flexGrow: 1,
     overflow: 'hidden',
