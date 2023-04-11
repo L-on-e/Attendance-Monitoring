@@ -100,7 +100,7 @@ const AllHistory = () => {
             keyExtractor={(item) => item.ID}
             renderItem={({ item: data }) => (
               <View>
-                {data.TimeOut && (
+                {data.TimeOut != '0000-00-00 00:00:00' ? (
                   <View
                     style={{
                       padding: 5,
@@ -122,7 +122,7 @@ const AllHistory = () => {
                       }}
                     />
                   </View>
-                )}
+                ):(<></>)}
                 {data.TimeIn && (
                   <View
                     style={{

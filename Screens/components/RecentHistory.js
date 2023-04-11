@@ -108,7 +108,7 @@ const RecentHistory = () => {
       throw error;
     }
   };
-
+  
   if (!isReady || !fontsLoaded) {
     return null;
   }
@@ -122,7 +122,7 @@ const RecentHistory = () => {
             keyExtractor={(item) => item.ID}
             renderItem={({ item: data }) => (
               <View>
-                {data.TimeOut && (
+                {data.TimeOut != '0000-00-00 00:00:00' ? (
                   <View
                     style={{
                       padding: 5,
@@ -144,7 +144,7 @@ const RecentHistory = () => {
                       }}
                     />
                   </View>
-                )}
+                ):(<></>)}
                 {data.TimeIn && (
                   <View
                     style={{

@@ -52,7 +52,6 @@ const HomeContent = ({ showMenu, scaleValue, offsetValue, closeButtonOffset, set
         animated: true,
       });
     };
-    console.log(showAllHistory);
     
     if (!isReady || !fontsLoaded) { 
       return(
@@ -129,7 +128,7 @@ const HomeContent = ({ showMenu, scaleValue, offsetValue, closeButtonOffset, set
                   const currentPage = x >= Dimensions.get('window').width / 2 ? 1 : 0;
                   setshowAllHistory(currentPage === 1);
                 }}>
-                  <RecentHistory />
+                  <RecentHistory/>
                   <AllHistory/>
               </ScrollView>            
             </View>
