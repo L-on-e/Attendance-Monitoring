@@ -117,18 +117,11 @@ const AllHistory = ({ historyBG }) => {
             keyExtractor={(item) => item.ID}
             renderItem={({ item: data }) => (
               <View>
-                <Text
-                  style={{
-                    textAlign: "center",
-                    color: historyBG == true ? "#fff" : "#006738",
-                    fontFamily: "Poppins_600SemiBold",
-                    fontSize: 18,
-                  }}
-                >
-                  Room Number {data.Room_Number}
-                </Text>
-                <View style={styles.ctnDvd}></View>
-                {data.TimeOut != "0000-00-00 00:00:00" ? (
+                
+              
+                <View style={{marginVertical:10,backgroundColor: 'white', width: '70%', alignSelf:'center', borderRadius: 5}}>
+                <Text style={{textAlign:"center",color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_600SemiBold', fontSize: 20}}>Room Number {data.Room_Number}</Text>
+                {data.TimeOut != '0000-00-00 00:00:00' ? (
                   <View
                     style={{
                       padding: 5,
@@ -138,30 +131,8 @@ const AllHistory = ({ historyBG }) => {
                     }}
                   >
                     <View style={{ flexDirection: "column" }}>
-                      <Text
-                        style={[
-                          styles.cntText,
-                          {
-                            color: historyBG == true ? "#fff" : "#006738",
-                            fontFamily: "Poppins_500Medium",
-                            fontSize: 18,
-                          },
-                        ]}
-                      >
-                        Out
-                      </Text>
-                      <Text
-                        style={[
-                          styles.cntText,
-                          {
-                            color: historyBG == true ? "#fff" : "#006738",
-                            fontFamily: "Poppins_500Medium",
-                            fontSize: 18,
-                          },
-                        ]}
-                      >
-                        {data.TimeOut}
-                      </Text>
+                      <Text style={[styles.cntText, {color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>Out</Text>
+                      <Text style={[styles.cntText, {color: historyBG==true?  '#006738' : '#fff', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>{data.TimeOut}</Text>
                     </View>
                     <View
                       style={{
@@ -185,41 +156,21 @@ const AllHistory = ({ historyBG }) => {
                     }}
                   >
                     <View style={{ flexDirection: "column" }}>
-                      <Text
-                        style={[
-                          styles.cntText,
-                          {
-                            color: historyBG == true ? "#fff" : "#006738",
-                            fontFamily: "Poppins_500Medium",
-                            fontSize: 18,
-                          },
-                        ]}
-                      >
-                        IN
-                      </Text>
-                      <Text
-                        style={[
-                          styles.cntText,
-                          {
-                            color: historyBG == true ? "#fff" : "#006738",
-                            fontFamily: "Poppins_500Medium",
-                            fontSize: 18,
-                          },
-                        ]}
-                      >
-                        {data.TimeIn}
-                      </Text>
+                      <Text style={[styles.cntText, {color: historyBG==true?  '#006738' : '#fff', fontFamily: 'Poppins_500Medium', fontSize: 18}]} >IN</Text>
+                      <Text style={[styles.cntText, {color: historyBG==true?  '#006738' : '#fff', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>{data.TimeIn}</Text>
                     </View>
                     <View
                       style={{
                         borderRadius: 100,
-                        backgroundColor: "white",
+                        backgroundColor: "green",
                         height: 20,
                         width: 20,
                       }}
                     />
                   </View>
                 )}
+                </View>
+
               </View>
             )}
           />
