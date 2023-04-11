@@ -21,7 +21,7 @@ import {
 import { UserContext } from "../../hooks/useAuth";
 import { ActivityIndicator } from "react-native";
 
-const RecentHistory = () => {
+const RecentHistory = ({historyBG}) => {
   const { user } = useContext(UserContext);
   const [recentLog, setRecentLog] = useState([]);
   const [dateToday, setDateToday] = useState([]);
@@ -117,7 +117,7 @@ const RecentHistory = () => {
       {recentLog.length != 0 && !loading ? (
         <>
           <FlatList
-            style={styles.containerShadow}
+            style={[styles.containerShadow,{backgroundColor: historyBG==true?'#fff':'#006738'}]}
             data={recentLog}
             keyExtractor={(item) => item.ID}
             renderItem={({ item: data }) => (
@@ -131,9 +131,9 @@ const RecentHistory = () => {
                       justifyContent: "space-around",
                     }}
                   >
-                    <View style={{ flexDirection: "column" }}>
-                      <Text>OUT</Text>
-                      <Text>{data.TimeOut}</Text>
+                    <View style={{ flexDirection: "column", alignContent: 'center'  }}>
+                      <Text style={[styles.cntText, {color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_600SemiBold', fontSize: 18}]}>OUT</Text>
+                      <Text style={[styles.cntText, {color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_600SemiBold', fontSize: 18}]}>{data.TimeOut}</Text>
                     </View>
                     <View
                       style={{
@@ -154,27 +154,30 @@ const RecentHistory = () => {
                       justifyContent: "space-around",
                     }}
                   >
-                    <View style={{ flexDirection: "column" }}>
-                      <Text>IN</Text>
-                      <Text>{data.TimeIn}</Text>
+                    <View style={{ flexDirection: "column", alignContent: 'center' }}>
+                      <Text style={[styles.cntText, {color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_600SemiBold', fontSize: 18}]}>IN</Text>
+                      <Text style={[styles.cntText, {color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_600SemiBold', fontSize: 18}]}>{data.TimeIn}</Text>
                     </View>
                     <View
                       style={{
                         borderRadius: 100,
-                        backgroundColor: "green",
+                        backgroundColor: "white",
                         height: 20,
                         width: 20,
                       }}
                     />
                   </View>
                 )}
+
+
+                <View style={styles.ctnDvd}></View>
               </View>
             )}
           />
         </>
       ) : (
         <>
-          <View style={styles.containerShadow}>
+          <View style={[styles.containerShadow,{backgroundColor: historyBG==true?'#fff':'#006738'}]}>
             <View
               style={{
                 padding: 10,
@@ -183,7 +186,7 @@ const RecentHistory = () => {
                 justifyContent: "space-around",
               }}
             >
-              <Text>No Data</Text>
+              <Text style={[styles.cntText, {color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_600SemiBold', fontSize: 18}]}>No Data</Text>
             </View>
           </View>
         </>
@@ -205,15 +208,27 @@ const styles = StyleSheet.create({
     shadowOffset: {
       width: 0,
       height: 1,
+    
     },
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
     elevation: 2,
     width: Dimensions.get("window").width - 40,
+    borderTopRightRadius: 5,
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
   },
   carouselContentContainer: {
     flexGrow: 1,
     overflow: "hidden",
+  },
+
+  
+  ctnDvd:{
+    borderBottomWidth: 3,
+    borderColor: 'white',
+    width: '75%',
+    alignSelf: 'center'
   },
 
   //HOME TITLE

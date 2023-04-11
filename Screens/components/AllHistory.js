@@ -20,7 +20,7 @@ import {
 } from "@expo-google-fonts/poppins";
 import { UserContext } from "../../hooks/useAuth";
 
-const AllHistory = () => {
+const AllHistory = ({historyBG}) => {
   const { user } = useContext(UserContext);
   const [allLog, setAllLog] = useState([]);
 
@@ -95,7 +95,7 @@ const AllHistory = () => {
       {allLog.length != 0 ? (
         <>
           <FlatList
-            style={styles.containerShadow}
+            style={[styles.containerShadow,{backgroundColor: historyBG==true?'#006738':'#fff'}]}
             data={allLog}
             keyExtractor={(item) => item.ID}
             renderItem={({ item: data }) => (
@@ -110,8 +110,8 @@ const AllHistory = () => {
                     }}
                   >
                     <View style={{ flexDirection: "column" }}>
-                      <Text>Out</Text>
-                      <Text>{data.TimeOut}</Text>
+                      <Text style={[styles.cntText, {color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_600SemiBold', fontSize: 18}]}>Out</Text>
+                      <Text style={[styles.cntText, {color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_600SemiBold', fontSize: 18}]}>{data.TimeOut}</Text>
                     </View>
                     <View
                       style={{
@@ -133,26 +133,29 @@ const AllHistory = () => {
                     }}
                   >
                     <View style={{ flexDirection: "column" }}>
-                      <Text>IN</Text>
-                      <Text>{data.TimeIn}</Text>
+                      <Text style={[styles.cntText, {color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_600SemiBold', fontSize: 18}]} >IN</Text>
+                      <Text style={[styles.cntText, {color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_600SemiBold', fontSize: 18}]}>{data.TimeIn}</Text>
                     </View>
                     <View
                       style={{
                         borderRadius: 100,
-                        backgroundColor: "green",
+                        backgroundColor: "white",
                         height: 20,
                         width: 20,
                       }}
                     />
                   </View>
                 )}
+
+                <View style={styles.ctnDvd}></View>
               </View>
+              
             )}
           />
         </>
       ) : (
         <>
-          <View style={styles.containerShadow}>
+          <View style={[styles.containerShadow,{backgroundColor: historyBG==true?'#fff' : '#006738'}]}>
             <View
               style={{
                 padding: 10,
@@ -161,7 +164,7 @@ const AllHistory = () => {
                 justifyContent: "space-around",
               }}
             >
-              <Text>No Data</Text>
+              <Text style={[styles.cntText, {color: historyBG==true? '#fff' : '#006738', fontFamily: 'Poppins_600SemiBold', fontSize: 18}]}>No Data</Text>
             </View>
           </View>
         </>
@@ -188,10 +191,20 @@ const styles = StyleSheet.create({
     shadowRadius: 1.41,
     elevation: 2,
     width: Dimensions.get("window").width - 40,
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
   },
   carouselContentContainer: {
     flexGrow: 1,
     overflow: "hidden",
+  },
+
+  ctnDvd:{
+    borderBottomWidth: 3,
+    borderColor: 'white',
+    width: '75%',
+    alignSelf: 'center'
   },
 
   //HOME TITLE
