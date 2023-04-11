@@ -1,10 +1,10 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert, KeyboardAvoidingView, ImageBackground, StatusBar, Image } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { StackActions, useRoute } from '@react-navigation/native';
 import * as SplashScreen from 'expo-splash-screen'
 import { LinearGradient } from 'expo-linear-gradient';
-
+import { UserContext } from '../hooks/useAuth';
 import {
   useFonts,
   Poppins_400Regular,
@@ -16,8 +16,8 @@ import {
 } from '@expo-google-fonts/poppins';
 
 const LoginScreen = () => {
+  const { login } = useContext(UserContext);
   const [isReady, setIsReady] = useState(false);
-
   useEffect(() => {
     async function prepare() {
       try { await SplashScreen.preventAutoHideAsync();} 
@@ -41,29 +41,8 @@ const LoginScreen = () => {
   const [ID, setID] = useState(null);
   const [password, setPassword] = useState(null);
 
-  const login = () =>{
-    const APIURL = "http://192.168.1.34/API/Login.php";
-    const headers = {
-      'Accept':'application/json',
-      'Content-Type':'application.json'
-    }
-    let data = {
-      id: ID,
-      password: password,
-    }
-    fetch(APIURL,{
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(data),
-    })
-    .then((response) =>
-      response.json())
-    .then((response) =>{
-      console.log(response[0].essage);
-      response[0].Message == "Success" ? 
-        navigation.dispatch(StackActions.replace('Home',{ID})) :  Alert.alert(response[0].Message);  
-    })
-    .catch((error)=>console.log(error));
+  const handleLogin = () =>{
+    login(ID, password);
   }
 
   if (!isReady || !fontsLoaded) { return null;}
@@ -93,8 +72,7 @@ const LoginScreen = () => {
 
           <View className="w-full" style={styles.btnDvd}>
               <TouchableOpacity onPress={
-                // () => navigation.navigate("Home")
-                login
+                handleLogin
                 } className="border-4 p-1 w-1/2 h-10 rounded-[20px] items-center bg-[#006738]" style={styles.btnDes}>
                   <Text className="text-white text-[18px]" style={styles.btnText}>SIGN IN</Text>
               </TouchableOpacity>

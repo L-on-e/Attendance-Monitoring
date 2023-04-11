@@ -8,8 +8,6 @@ import Subjects from './Subjects';
 import { useRoute } from '@react-navigation/native';
 
 const Home = () => {
-  const { params }  = useRoute();
-  const userID  = params.ID;
   const styles = useStyles();
   const [showMenu, setShowMenu] = useState(false);
   const offsetValue = useRef(new Animated.Value(0)).current;
@@ -29,7 +27,7 @@ const Home = () => {
       <Navbar handleActiveNavigation={handleActiveNavigation}/>
       {
         activeNavigation == 'Home' ?
-        <HomeContent userID={userID} showMenu={showMenu} scaleValue={scaleValue} offsetValue={offsetValue} closeButtonOffset={closeButtonOffset} setShowMenu={handleMenuBoolean}/>
+        <HomeContent showMenu={showMenu} scaleValue={scaleValue} offsetValue={offsetValue} closeButtonOffset={closeButtonOffset} setShowMenu={handleMenuBoolean}/>
         :
         activeNavigation == 'Subjects' ?
         <Subjects showMenu={showMenu} scaleValue={scaleValue} offsetValue={offsetValue} closeButtonOffset={closeButtonOffset} setShowMenu={handleMenuBoolean}/>
