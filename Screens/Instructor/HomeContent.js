@@ -109,12 +109,12 @@ const HomeContent = ({ showMenu, scaleValue, offsetValue, closeButtonOffset, set
               <TouchableOpacity onPress={()=>{handlePress(0, false)}} style={{flexGrow: 1, justifyContent: 'center',
                 borderTopRightRadius: 10, borderTopLeftRadius:10,
                 backgroundColor: showAllHistory==true?'#fff':'#006738',minHeight:'5%', maxHeight:'100%'}}>
-                  <Text style={{textAlign: 'center', fontFamily:'Poppins_600SemiBold', color:showAllHistory==true?'#006738':'white'}}>Recent History</Text>
+                  <Text style={{textAlign: 'center', fontFamily:'Poppins_600SemiBold', color:showAllHistory==true?'#006738':'white', fontSize: 20}}>Recent History</Text>
               </TouchableOpacity> 
               <TouchableOpacity onPress={()=>{handlePress(1,true)}} style={{flexGrow: 1, justifyContent: 'center',
                 borderTopRightRadius: 10, borderTopLeftRadius:10,
                 backgroundColor: showAllHistory==true?'#006738':'#fff', minHeight:'5%', maxHeight:'100%' }}>
-                  <Text style={{textAlign: 'center' , fontFamily:'Poppins_600SemiBold', color:showAllHistory==true?'white':'#006738'}}>All History</Text>
+                  <Text style={{textAlign: 'center' , fontFamily:'Poppins_600SemiBold', color:showAllHistory==true?'white':'#006738', fontSize: 20}}>All History</Text>
 
               </TouchableOpacity> 
             </View>
@@ -129,8 +129,8 @@ const HomeContent = ({ showMenu, scaleValue, offsetValue, closeButtonOffset, set
                   const currentPage = x >= Dimensions.get('window').width / 2 ? 1 : 0;
                   setshowAllHistory(currentPage === 1);
                 }}>
-                  <RecentHistory />
-                  <AllHistory/>
+                  <RecentHistory historyBG={showAllHistory}/>
+                  <AllHistory historyBG={showAllHistory}/>
               </ScrollView>            
             </View>
           </Animated.View>
