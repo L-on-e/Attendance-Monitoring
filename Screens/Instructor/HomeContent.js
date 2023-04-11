@@ -52,7 +52,6 @@ const HomeContent = ({ showMenu, scaleValue, offsetValue, closeButtonOffset, set
         animated: true,
       });
     };
-    console.log(showAllHistory);
     
     if (!isReady || !fontsLoaded) { 
       return(

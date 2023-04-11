@@ -7,7 +7,7 @@ export const UserContext = createContext();
 
 const UserContextProvider = (props) =>{
   const [user, setUser] = useState(null);
-
+  
   useEffect(() =>{
     SecureStore.getItemAsync('userToken')
     .then((userToken) =>{
@@ -18,6 +18,15 @@ const UserContextProvider = (props) =>{
     .catch((error) => console.log(error));
   },[])
   
+  const blobToImage = async (blob) => {
+    const img = new Image();
+    img.src = URL.createObjectURL(blob);
+    await new Promise(resolve => {
+      img.onload = resolve;
+    });
+    return img;
+  };
+
   const login = (ID, password) =>{
     const APIURL = "http://192.168.111.95/API/Login.php";
     const headers = {
@@ -42,7 +51,7 @@ const UserContextProvider = (props) =>{
         const secretKey = Constants.manifest.extra.secretKey;
         const userToken = Crypto.digestStringAsync(
           Crypto.CryptoDigestAlgorithm.SHA256,
-          `${user.id}${user.name}${secretKey}`
+          `${user.id}${user.name}${user.profilePhoto}${secretKey}`
           );
         SecureStore.setItemAsync('userToken', JSON.stringify(userToken))
         .then(()=> setUser(user))

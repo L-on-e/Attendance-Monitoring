@@ -86,7 +86,7 @@ const RecentHistory = ({historyBG}) => {
       };
       const data = {
         userID: user.id,
-        dateToday: date, // use the argument instead of state variable
+        dateToday: date,
       };
       const response = await fetch(API_URL, {
         method: "POST",
@@ -97,6 +97,7 @@ const RecentHistory = ({historyBG}) => {
       if (responseData.length && responseData[0].Data !== "No data") {
         const formattedData = responseData.map((record) => ({
           ID: record.ID,
+          Room_Number: record.Room_Number,
           TimeIn: `${record.TimeIn_Date} ${record.TimeIn_Time}`,
           TimeOut: `${record.TimeOut_Date} ${record.TimeOut_Time}`,
         }));
@@ -108,9 +109,7 @@ const RecentHistory = ({historyBG}) => {
       throw error;
     }
   };
-
-  console.log(historyBG + "123")
-
+  
   if (!isReady || !fontsLoaded) {
     return null;
   }
@@ -124,7 +123,8 @@ const RecentHistory = ({historyBG}) => {
             keyExtractor={(item) => item.ID}
             renderItem={({ item: data }) => (
               <View>
-                {data.TimeOut && (
+                <Text style={{paddingLeft: 30, color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_600SemiBold', fontSize: 18}}>Room Number {data.Room_Number}</Text>
+                {data.TimeOut != '0000-00-00 00:00:00' ? (
                   <View
                     style={{
                       padding: 5,
@@ -134,8 +134,8 @@ const RecentHistory = ({historyBG}) => {
                     }}
                   >
                     <View style={{ flexDirection: "column", alignContent: 'center'  }}>
-                      <Text style={[styles.cntText, {color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_600SemiBold', fontSize: 18}]}>OUT</Text>
-                      <Text style={[styles.cntText, {color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_600SemiBold', fontSize: 18}]}>{data.TimeOut}</Text>
+                      <Text style={[styles.cntText, {color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>OUT</Text>
+                      <Text style={[styles.cntText, {color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>{data.TimeOut}</Text>
                     </View>
                     <View
                       style={{
@@ -146,7 +146,7 @@ const RecentHistory = ({historyBG}) => {
                       }}
                     />
                   </View>
-                )}
+                ):(<></>)}
                 {data.TimeIn && (
                   <View
                     style={{
@@ -157,8 +157,8 @@ const RecentHistory = ({historyBG}) => {
                     }}
                   >
                     <View style={{ flexDirection: "column", alignContent: 'center' }}>
-                      <Text style={[styles.cntText, {color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_600SemiBold', fontSize: 18}]}>IN</Text>
-                      <Text style={[styles.cntText, {color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_600SemiBold', fontSize: 18}]}>{data.TimeIn}</Text>
+                      <Text style={[styles.cntText, {color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>IN</Text>
+                      <Text style={[styles.cntText, {color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>{data.TimeIn}</Text>
                     </View>
                     <View
                       style={{
@@ -170,9 +170,6 @@ const RecentHistory = ({historyBG}) => {
                     />
                   </View>
                 )}
-
-
-                <View style={styles.ctnDvd}></View>
               </View>
             )}
           />
@@ -201,7 +198,7 @@ export default RecentHistory;
 
 const styles = StyleSheet.create({
   containerShadow: {
-    flexGrow: 1,
+    flexGrow: 0.8,
     padding: 15,
     backgroundColor: "white",
     marginHorizontal: 4,
