@@ -41,7 +41,6 @@ const LoginScreen = () => {
   const [ID, setID] = useState(null);
   const [password, setPassword] = useState(null);
 
-
   const handleLogin = () =>{
     login(ID, password);
   }
