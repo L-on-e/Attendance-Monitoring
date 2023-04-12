@@ -1,5 +1,5 @@
 import { Alert, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { useNavigation } from '@react-navigation/native';
 import {Ionicons} from '@expo/vector-icons';
@@ -14,8 +14,10 @@ import {
   Poppins_900Black,
 } from '@expo-google-fonts/poppins';
 
+import { UserContext } from '../../hooks/useAuth';
+
 const TimeIn = () => {
-  
+    const { user } = useContext(UserContext);
     const navigation = useNavigation();
     const [hasPermission, setHasPermission]= useState();
     const [scanned, setScanned] = useState();
@@ -61,7 +63,6 @@ const TimeIn = () => {
       const  timeIn = await SetTimeIn();
       await InsertDB(timeIn.date, timeIn.time, data);
       Alert.alert("Time in","Date: "+ timeIn.date +"\nTime: " + timeIn.time);
-    //   console.log(data);
     };
   
     const InsertDB = async(date, time, uid) =>{
@@ -71,13 +72,13 @@ const TimeIn = () => {
         'Content-Type':'application.json'
       }
       let data = {
-          ID: uid ,//uuid v4
+          ID: uid ,
           roomID: uid,
-          instructorID: "1000",
+          instructorID: user.id,
           timeInDate: date,
           timeInHour: time,
         }
-        
+        console.log(data);
       await fetch(APIURL,{
         method: 'POST',
         headers: headers,

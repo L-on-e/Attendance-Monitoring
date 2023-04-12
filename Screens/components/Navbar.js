@@ -6,6 +6,7 @@ import {
   Image,
   Alert,
 } from "react-native";
+import { Octicons } from '@expo/vector-icons'; 
 import React, { useContext, useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { UserContext } from "../../hooks/useAuth";
@@ -14,7 +15,8 @@ import * as ImagePicker from "expo-image-picker";
 const Navbar = ({ handleActiveNavigation }) => {
   const { user, logout } = useContext(UserContext);
   const [currentTab, setCurrentTab] = useState("Home");
-  const [profilePhoto, setProfilePhoto] = useState(user.profilePhoto);
+  const tempo = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnu-_OQu5Clvfk0WgCGmE1k0A4naXq0UMVAw&usqp=CAU";
+  const [profilePhoto, setProfilePhoto] = useState(user.profilePhoto == "" ? tempo:user.profilePhoto);
 
   const logoutHandler = () => {
     logout();
@@ -74,11 +76,6 @@ const Navbar = ({ handleActiveNavigation }) => {
       Alert.alert("An error occurred while fetching data from the server.");
     }
   };
-
-  // useEffect(() => {
-  //   fetchNewProfile();
-  // }, [profilePhoto])
-  
 
   const fetchNewProfile = async () => {
     const APIURL = "http://192.168.111.95/API/fetchProfilePhoto.php";
@@ -172,7 +169,7 @@ const Navbar = ({ handleActiveNavigation }) => {
       </TouchableOpacity>
       <View style={{ flexGrow: 1, marginTop: 50 }}>
         {TabButton(currentTab, setCurrentTab, "Home", "home-outline")}
-        {TabButton(currentTab, setCurrentTab, "Subjects", "book-outline")}
+        {/* {TabButton(currentTab, setCurrentTab, "Subjects", "book-outline")} */}
         {TabButton(currentTab, setCurrentTab, "Settings", "settings-outline")}
       </View>
       <View>

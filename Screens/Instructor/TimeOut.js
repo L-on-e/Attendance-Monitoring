@@ -1,8 +1,9 @@
 import { Alert, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { useNavigation } from '@react-navigation/native';
 import {Ionicons} from '@expo/vector-icons';
+import { UserContext } from '../../hooks/useAuth';
 
 import * as SplashScreen from "expo-splash-screen";
 import {
@@ -16,6 +17,7 @@ import {
 } from '@expo-google-fonts/poppins';
 
 const TimeOut = () => {
+  const { user } = useContext(UserContext);
     const navigation = useNavigation();
     const [hasPermission, setHasPermission]= useState();
     const [scanned, setScanned] = useState();
@@ -63,7 +65,6 @@ const TimeOut = () => {
       const  timeOut = await SetTimeOut();
       await InsertDB(timeOut.date, timeOut.time, data);
       Alert.alert("Time out","Date: "+ timeOut.date +"\nTime: " + timeOut.time);
-    //   console.log(data);
     };
   
     const InsertDB = (date, time, uid) =>{
@@ -73,9 +74,9 @@ const TimeOut = () => {
         'Content-Type':'application.json'
       }
       let data = {
-          ID: uid ,//uuid v4
+          ID: uid ,
           roomID: uid,
-          instructorID: "1000",
+          instructorID: user.id,
           timeOutDate: date,
           timeOutTime: time,
         }
