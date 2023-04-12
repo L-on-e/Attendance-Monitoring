@@ -198,6 +198,7 @@ export default HomeContent
     },
 
     qrTit:{
+      marginTop: 50,
       fontFamily:'Poppins_800ExtraBold',
       color: '#006738',
     },
@@ -206,7 +207,7 @@ export default HomeContent
       aspectRatio: 1,
       resizeMode: 'contain',
       maxWidth: "30%",
-      maxHeight: "80%",
+      maxHeight: "100%",
       alignSelf: 'center',
     },
 
