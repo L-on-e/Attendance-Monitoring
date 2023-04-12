@@ -59,7 +59,7 @@ const SignUpScreen = () => {
   }
 
   const Register = () =>{
-    const APIURL = "http://192.168.7.241/API/Register.php";
+    const APIURL = "http://192.168.4.6/API/Register.php";
     const headers = {
       'Accept':'application/json',
       'Content-Type':'application.json'

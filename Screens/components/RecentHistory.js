@@ -81,7 +81,7 @@ const RecentHistory = ({ historyBG }) => {
 
   const readRecent = async (date) => {
     try {
-      const API_URL = "http://192.168.7.241/API/ReadRecentTimeIn.php";
+      const API_URL = "http://192.168.4.6/API/ReadRecentTimeIn.php";
       const headers = {
         Accept: "application/json",
         "Content-Type": "application/json",

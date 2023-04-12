@@ -50,7 +50,7 @@ const Navbar = ({ handleActiveNavigation }) => {
 
   const uploadImage = async (base64String) => {
     try {
-      const API_URL = "http://192.168.7.241/API/uploadImage.php";
+      const API_URL = "http://192.168.4.6/API/uploadImage.php";
       const headers = {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -78,7 +78,7 @@ const Navbar = ({ handleActiveNavigation }) => {
   };
 
   const fetchNewProfile = async () => {
-    const APIURL = "http://192.168.7.241/API/fetchProfilePhoto.php";
+    const APIURL = "http://192.168.4.6/API/fetchProfilePhoto.php";
     const headers = {
       Accept: "application/json",
       "Content-Type": "application.json",

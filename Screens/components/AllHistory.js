@@ -69,7 +69,7 @@ const AllHistory = ({ historyBG }) => {
 
   const readAllHistory = async () => {
     try {
-      const API_URL = "http://192.168.7.241/API/ReadAllHistory.php";
+      const API_URL = "http://192.168.4.6/API/ReadAllHistory.php";
       const headers = {
         Accept: "application/json",
         "Content-Type": "application/json",

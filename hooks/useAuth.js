@@ -21,7 +21,7 @@ const UserContextProvider = (props) =>{
   
 
   const login = (ID, password) =>{
-    const APIURL = "http://192.168.7.241/API/Login.php";
+    const APIURL = "http://192.168.4.6/API/Login.php";
     const headers = {
           'Accept':'application/json',
           'Content-Type':'application.json'
