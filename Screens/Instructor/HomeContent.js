@@ -198,7 +198,7 @@ export default HomeContent
     },
 
     qrTit:{
-      marginTop: 50,
+      marginTop: 10,
       fontFamily:'Poppins_800ExtraBold',
       color: '#006738',
     },

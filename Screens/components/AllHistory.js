@@ -69,7 +69,7 @@ const AllHistory = ({ historyBG }) => {
 
   const readAllHistory = async () => {
     try {
-      const API_URL = "http://192.168.111.95/API/ReadAllHistory.php";
+      const API_URL = "http://192.168.7.241/API/ReadAllHistory.php";
       const headers = {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -107,7 +107,7 @@ const AllHistory = ({ historyBG }) => {
   const [dataEnd, setDataEnd] = useState(3);
 
   useEffect(() => {
-    setTotalPage(Math.ceil(allLog.length / 3));
+    setTotalPage(Math.ceil(allLog.length / 3) == 0 ? 1 : Math.ceil(allLog.length / 3));
     setCurrentPage(1);
     setDataStart(0);
     setDataEnd(3);

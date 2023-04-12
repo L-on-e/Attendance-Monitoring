@@ -66,7 +66,7 @@ const TimeIn = () => {
     };
   
     const InsertDB = async(date, time, uid) =>{
-      const APIURL = "http://192.168.111.95/API/TimeIn.php";
+      const APIURL = "http://192.168.7.241/API/TimeIn.php";
       const headers = {
         'Accept':'application/json',
         'Content-Type':'application.json'

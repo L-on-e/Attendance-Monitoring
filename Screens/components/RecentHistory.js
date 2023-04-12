@@ -81,7 +81,7 @@ const RecentHistory = ({ historyBG }) => {
 
   const readRecent = async (date) => {
     try {
-      const API_URL = "http://192.168.111.95/API/ReadRecentTimeIn.php";
+      const API_URL = "http://192.168.7.241/API/ReadRecentTimeIn.php";
       const headers = {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -119,7 +119,7 @@ const RecentHistory = ({ historyBG }) => {
   const [dataEnd, setDataEnd] = useState(3);
   
   useEffect(() => {
-    setTotalPage(Math.ceil(recentLog.length / 3));
+    setTotalPage(Math.ceil(recentLog.length / 3) == 0 ? 1 : Math.ceil(allLog.length / 3));
     setCurrentPage(1);
     setDataStart(0);
     setDataEnd(3);
