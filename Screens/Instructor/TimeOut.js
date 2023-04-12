@@ -5,11 +5,51 @@ import { useNavigation } from '@react-navigation/native';
 import {Ionicons} from '@expo/vector-icons';
 import { UserContext } from '../../hooks/useAuth';
 
+import * as SplashScreen from "expo-splash-screen";
+import {
+  useFonts,
+  Poppins_400Regular,
+  Poppins_500Medium,
+  Poppins_600SemiBold,
+  Poppins_700Bold,
+  Poppins_800ExtraBold,
+  Poppins_900Black,
+} from '@expo-google-fonts/poppins';
+
 const TimeOut = () => {
   const { user } = useContext(UserContext);
     const navigation = useNavigation();
     const [hasPermission, setHasPermission]= useState();
     const [scanned, setScanned] = useState();
+
+
+    
+    const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    async function prepare() {
+      try {
+        await SplashScreen.preventAutoHideAsync();
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setIsReady(true);
+      }
+    }
+    prepare();
+    return () => {
+      SplashScreen.hideAsync();
+    };
+  }, [isReady]);
+
+  let [fontsLoaded] = useFonts({
+    Poppins_400Regular,
+    Poppins_500Medium,
+    Poppins_600SemiBold,
+    Poppins_700Bold,
+    Poppins_800ExtraBold,
+    Poppins_900Black,
+  });
   
     useEffect(() => {
       const getBarCodeScannerPermissions = async () => {
@@ -75,7 +115,9 @@ const TimeOut = () => {
     if (hasPermission === false) {
       Alert.alert("No access to camera");
     }
-  
+  if (!isReady || !fontsLoaded) {
+    return null;
+  }
     return (
       <SafeAreaView className="flex-1">
           <View>
@@ -83,7 +125,7 @@ const TimeOut = () => {
               <TouchableOpacity onPress={()=>{navigation.navigate('Home')}}>
                   <Ionicons name='chevron-back-outline' color={"#fff"} size={30}/>
               </TouchableOpacity>
-              <Text className="text-white">Time Out</Text>
+              <Text className="text-white text-2xl"  style={styles.headTit}>Time Out</Text>
             </View>
           </View>
           <View className="grow">
@@ -96,7 +138,7 @@ const TimeOut = () => {
               {
                   scanned &&
                   <TouchableOpacity onPress={() =>{setScanned(false)}} className="border-2 p-5 rounded-[10px] bg-[#006738] items-center justify-center">
-                  <Text className="text-white text-xl font-bold">Scan Again</Text>
+                  <Text className="text-white text-3xl">Scan Again</Text>
                   </TouchableOpacity>
               }
           </View>
@@ -106,4 +148,9 @@ const TimeOut = () => {
 
 export default TimeOut
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+
+    headTit:{
+    fontFamily: 'Poppins_600SemiBold',
+  },
+})

@@ -362,7 +362,6 @@ const styles = StyleSheet.create({
     shadowRadius: 1.41,
     elevation: 2,
     width: Dimensions.get("window").width - 40,
-    // borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
   },
