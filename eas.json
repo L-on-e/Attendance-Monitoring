@@ -1,0 +1,19 @@
+{
+    "build": {
+      "AMApp": {
+        "android": {
+          "buildType": "apk"
+        }
+      },
+      "AMApp2": {
+        "android": {
+          "gradleCommand": ":app:assembleRelease"
+        }
+      },
+      "AMApp3": {
+        "developmentClient": true
+      },
+      "production": {}
+    }
+  }
+  
