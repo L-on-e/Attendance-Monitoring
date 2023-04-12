@@ -6,6 +6,7 @@ import {
   View,
   Dimensions,
   Alert,
+  TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
@@ -19,6 +20,8 @@ import {
   Poppins_900Black,
 } from "@expo-google-fonts/poppins";
 import { UserContext } from "../../hooks/useAuth";
+import { Ionicons } from "@expo/vector-icons";
+import { ActivityIndicator } from "react-native";
 
 const AllHistory = ({ historyBG }) => {
   const { user } = useContext(UserContext);
@@ -83,13 +86,13 @@ const AllHistory = ({ historyBG }) => {
       if (responseData[0]?.Data !== "No data") {
         const formattedData = responseData.map((record) => ({
           ID: record.ID,
-          Room_Number: record.Room_Number,
+          Room_Number: record.room,
           TimeIn: `${record.TimeIn_Date} ${record.TimeIn_Time}`,
           TimeOut: `${record.TimeOut_Date} ${record.TimeOut_Time}`,
         }));
         setAllLog(formattedData);
       } else {
-        console.log(error);
+        console.log("No Data");
       }
     } catch (error) {
       console.log(error);
@@ -97,11 +100,58 @@ const AllHistory = ({ historyBG }) => {
     }
   };
 
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
+  const [dataStart, setDataStart] = useState(0);
+  const [dataEnd, setDataEnd] = useState(3);
+
+  useEffect(() => {
+    setTotalPage(Math.ceil(allLog.length / 3));
+    setCurrentPage(1);
+    setDataStart(0);
+    setDataEnd(3);
+
+    return () => {};
+  }, [allLog]);
+
+  const handleNextPage = () => {
+    if (currentPage != totalPage) {
+      setDataStart(dataStart + 3);
+      setDataEnd(dataEnd + 3 > allLog.length ? allLog.length : dataEnd + 3);
+      setCurrentPage(currentPage + 1);
+    } else {
+      return;
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage != 1) {
+      setDataStart(dataStart - 3);
+      setDataEnd(dataEnd - 3 <= 3 ? 3 : dataEnd - 3);
+      setCurrentPage(currentPage - 1);
+    } else {
+      return;
+    }
+  };
+  //Pagination
+
   if (!isReady || !fontsLoaded) {
     return null;
   }
   return (
     <View>
+      <View style={{marginHorizontal: 4, width: Dimensions.get("window").width - 40, borderTopLeftRadius: 5, backgroundColor: '#006738', flexDirection: "row",justifyContent: "flex-start",alignItems: "center",paddingTop:10,}}>
+        <TouchableOpacity onPress={() => { handlePrevPage(); }} >
+          <Ionicons name="chevron-back-outline" size={35} color={"#fff"} />
+        </TouchableOpacity>
+        <Text style={{color:'#fff'}}>{currentPage}</Text>
+        <Text style={{color:'#fff'}}> of </Text>
+        <Text style={{color:'#fff'}}>{totalPage}</Text>
+        <TouchableOpacity onPress={() => { handleNextPage(); }} >
+          <Ionicons name="chevron-forward-outline" size={35} color={"#fff"} />
+        </TouchableOpacity>
+      </View>
       {allLog.length != 0 ? (
         <>
           <FlatList
@@ -113,64 +163,122 @@ const AllHistory = ({ historyBG }) => {
               styles.containerShadow,
               { backgroundColor: historyBG == true ? "#006738" : "#fff" },
             ]}
-            data={allLog}
+            data={allLog.slice(dataStart,dataEnd)}
             keyExtractor={(item) => item.ID}
             renderItem={({ item: data }) => (
               <View>
-                
-              
-                <View style={{marginVertical:10,backgroundColor: 'white', width: '70%', alignSelf:'center', borderRadius: 5}}>
-                <Text style={{textAlign:"center",color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_600SemiBold', fontSize: 20}}>Room Number {data.Room_Number}</Text>
-                {data.TimeOut != '0000-00-00 00:00:00' ? (
-                  <View
+                <View
+                  style={{
+                    marginVertical: 10,
+                    backgroundColor: "white",
+                    width: "70%",
+                    alignSelf: "center",
+                    borderRadius: 5,
+                  }}
+                >
+                  <Text
                     style={{
-                      padding: 5,
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-around",
+                      textAlign: "center",
+                      color: historyBG == true ? "#006738" : "#fff",
+                      fontFamily: "Poppins_600SemiBold",
+                      fontSize: 20,
                     }}
                   >
-                    <View style={{ flexDirection: "column" }}>
-                      <Text style={[styles.cntText, {color: historyBG==true? '#006738' : '#fff', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>Out</Text>
-                      <Text style={[styles.cntText, {color: historyBG==true?  '#006738' : '#fff', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>{data.TimeOut}</Text>
-                    </View>
+                    {data.Room_Number}
+                  </Text>
+                  {data.TimeOut != "0000-00-00 00:00:00" ? (
                     <View
                       style={{
-                        borderRadius: 100,
-                        backgroundColor: "red",
-                        height: 20,
-                        width: 20,
+                        padding: 5,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-around",
                       }}
-                    />
-                  </View>
-                ) : (
-                  <></>
-                )}
-                {data.TimeIn && (
-                  <View
-                    style={{
-                      padding: 5,
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-around",
-                    }}
-                  >
-                    <View style={{ flexDirection: "column" }}>
-                      <Text style={[styles.cntText, {color: historyBG==true?  '#006738' : '#fff', fontFamily: 'Poppins_500Medium', fontSize: 18}]} >IN</Text>
-                      <Text style={[styles.cntText, {color: historyBG==true?  '#006738' : '#fff', fontFamily: 'Poppins_500Medium', fontSize: 18}]}>{data.TimeIn}</Text>
+                    >
+                      <View style={{ flexDirection: "column" }}>
+                        <Text
+                          style={[
+                            styles.cntText,
+                            {
+                              color: historyBG == true ? "#006738" : "#fff",
+                              fontFamily: "Poppins_500Medium",
+                              fontSize: 18,
+                            },
+                          ]}
+                        >
+                          Out
+                        </Text>
+                        <Text
+                          style={[
+                            styles.cntText,
+                            {
+                              color: historyBG == true ? "#006738" : "#fff",
+                              fontFamily: "Poppins_500Medium",
+                              fontSize: 18,
+                            },
+                          ]}
+                        >
+                          {data.TimeOut}
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          borderRadius: 100,
+                          backgroundColor: "red",
+                          height: 20,
+                          width: 20,
+                        }}
+                      />
                     </View>
+                  ) : (
+                    <></>
+                  )}
+                  {data.TimeIn && (
                     <View
                       style={{
-                        borderRadius: 100,
-                        backgroundColor: "green",
-                        height: 20,
-                        width: 20,
+                        padding: 5,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-around",
                       }}
-                    />
-                  </View>
-                )}
+                    >
+                      <View style={{ flexDirection: "column" }}>
+                        <Text
+                          style={[
+                            styles.cntText,
+                            {
+                              color: historyBG == true ? "#006738" : "#fff",
+                              fontFamily: "Poppins_500Medium",
+                              fontSize: 18,
+                            },
+                          ]}
+                        >
+                          IN
+                        </Text>
+                        <Text
+                          style={[
+                            styles.cntText,
+                            {
+                              color: historyBG == true ? "#006738" : "#fff",
+                              fontFamily: "Poppins_500Medium",
+                              fontSize: 18,
+                            },
+                          ]}
+                        >
+                          {data.TimeIn}
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          borderRadius: 100,
+                          backgroundColor: "green",
+                          height: 20,
+                          width: 20,
+                        }}
+                      />
+                    </View>
+                  )}
                 </View>
-
               </View>
             )}
           />
@@ -186,7 +294,7 @@ const AllHistory = ({ historyBG }) => {
             <View
               style={{
                 padding: 10,
-                flexDirection: "row",
+                flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "space-around",
               }}
@@ -203,6 +311,9 @@ const AllHistory = ({ historyBG }) => {
               >
                 No Data
               </Text>
+              <TouchableOpacity style={{marginTop:20}} onPress={()=>setLoading(true)}>
+                {loading == true ? <ActivityIndicator size={"large"}/> : <Ionicons name="refresh" size={30} color={"#fff"}/>}
+              </TouchableOpacity>
             </View>
           </View>
         </>
@@ -219,7 +330,7 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: "white",
     marginHorizontal: 4,
-    marginVertical: 15,
+    marginBottom: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -229,7 +340,7 @@ const styles = StyleSheet.create({
     shadowRadius: 1.41,
     elevation: 2,
     width: Dimensions.get("window").width - 40,
-    borderTopLeftRadius: 5,
+    // borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
   },

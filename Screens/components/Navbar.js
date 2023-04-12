@@ -15,7 +15,7 @@ import * as ImagePicker from "expo-image-picker";
 const Navbar = ({ handleActiveNavigation }) => {
   const { user, logout } = useContext(UserContext);
   const [currentTab, setCurrentTab] = useState("Home");
-  const tempo = "https://static.vecteezy.com/system/resources/previews/010/056/184/original/people-icon-sign-symbol-design-free-png.png";
+  const tempo = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnu-_OQu5Clvfk0WgCGmE1k0A4naXq0UMVAw&usqp=CAU";
   const [profilePhoto, setProfilePhoto] = useState(user.profilePhoto == "" ? tempo:user.profilePhoto);
 
   const logoutHandler = () => {

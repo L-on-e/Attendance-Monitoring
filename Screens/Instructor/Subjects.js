@@ -17,8 +17,6 @@ const Subjects = ({ showMenu, scaleValue, offsetValue, closeButtonOffset, setSho
               <AntDesign name={showMenu ? 'menu-unfold' : 'menu-fold'} size={20} style={{ marginTop: 40 }} />
             </TouchableOpacity>
             <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'black', paddingTop: 20 }}>Subjects</Text>    
-            <Text style={{ fontSize: 20, fontWeight: 'bold', paddingTop: 15, paddingBottom: 5 }}>sub</Text>
-            <Text>sub</Text>
           </Animated.View>
         </Animated.View>
       );

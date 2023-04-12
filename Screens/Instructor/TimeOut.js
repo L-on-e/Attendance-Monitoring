@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { useNavigation } from '@react-navigation/native';
 import {Ionicons} from '@expo/vector-icons';
+import { UserContext } from '../../hooks/useAuth';
 
 const TimeOut = () => {
   const { user } = useContext(UserContext);
