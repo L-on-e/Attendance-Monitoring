@@ -119,7 +119,7 @@ const RecentHistory = ({ historyBG }) => {
   const [dataEnd, setDataEnd] = useState(3);
   
   useEffect(() => {
-    setTotalPage(Math.ceil(recentLog.length / 3) == 0 ? 1 : Math.ceil(allLog.length / 3));
+    setTotalPage(Math.ceil(recentLog.length / 3) == 0 ? 1 : Math.ceil(recentLog.length / 3));
     setCurrentPage(1);
     setDataStart(0);
     setDataEnd(3);

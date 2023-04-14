@@ -23,7 +23,7 @@ const TimeIn = () => {
     const [scanned, setScanned] = useState();
   
     const [isReady, setIsReady] = useState(false);
-
+  
   useEffect(() => {
     async function prepare() {
       try {
@@ -64,7 +64,6 @@ const TimeIn = () => {
       await InsertDB(timeIn.date, timeIn.time, data);
       Alert.alert("Time in","Date: "+ timeIn.date +"\nTime: " + timeIn.time);
     };
-  
     const InsertDB = async(date, time, uid) =>{
       const APIURL = "http://192.168.4.6/API/TimeIn.php";
       const headers = {
@@ -72,13 +71,11 @@ const TimeIn = () => {
         'Content-Type':'application.json'
       }
       let data = {
-          ID: uid ,
           roomID: uid,
           instructorID: user.id,
           timeInDate: date,
           timeInHour: time,
         }
-        console.log(data);
       await fetch(APIURL,{
         method: 'POST',
         headers: headers,
